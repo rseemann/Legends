@@ -32,7 +32,7 @@ public class Display {
 	int keptDices = 1;
 
 	public void adicionaElementos(Container pane) {
-		// ----layout do painelll---
+		// ----panel Layout---
 
 		panel = new JPanel(new GridBagLayout());
 		panel.setLayout(new GridBagLayout());
