@@ -13,7 +13,7 @@ public class SaveRPGCharacters {
 		ObjectOutputStream os = new ObjectOutputStream(fileStream);
 		
 		
-		os.writeObject(RPGChar1);
+		//os.writeObject(RPGChar1);
 		
 	}
 	
