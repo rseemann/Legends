@@ -1,6 +1,6 @@
 package Interfaces;
 
-import Ficha.Skill;
+import Skills.Skill;
 
 public interface SynergyBonus{
 	public void SynerGyDescription();

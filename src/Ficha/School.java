@@ -2,6 +2,8 @@ package Ficha;
 
 import java.util.ArrayList;
 
+import Skills.Skill;
+
 abstract class School implements SchoolTechniques{
 	private String name;
 	private String benefit;

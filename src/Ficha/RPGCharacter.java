@@ -2,10 +2,12 @@ package Ficha;
 
 import java.util.*;
 
+import Skills.Skill;
+
 public class RPGCharacter {
 	private String name;
 	private Family family;
-	private Skill[] skills;
+	private ArrayList<Skill> skills = new ArrayList<Skill>();
 	private int skillPoints;
 	private String clan;
 	private Map wounds = new HashMap();
@@ -37,7 +39,7 @@ public class RPGCharacter {
 	private int rank;
 
 	public void calcRank() {
-		this.rank = (this.ringSum*10)+(skillPoints);
+		this.rank = (this.ringSum * 10) + (skillPoints);
 	}
 
 	// system related methods
@@ -52,15 +54,44 @@ public class RPGCharacter {
 		wounds.put("Down", earthRing * 14);
 		wounds.put("Out", earthRing * 19);
 	}
+	
+	
+	//skills
+	public void addSkill(String name) {
+		skills.add(new Skill(name));
+	}
+	
+	public int getSkillLocation(String skillName){
+		int i = 0;
+		while (skillName.compareToIgnoreCase(skills.get(i).getName()) != 0) {
+			i++;
+		}
+		return i;
+	}
 
+	public int getSkillRank(String skillName) {
+		int i = getSkillLocation(skillName);
+		return skills.get(i).getRank();
+	}
+	
+	public void setSkillRank(String skillName, int rank) {
+		int i = getSkillLocation(skillName);
+		this.skills.get(i).setRank(rank);
+	}
+	
+	
+	public ArrayList<Skill> getSkills(){
+		return skills;
+	}
+	
+	//
 	
 	
 	
-	
+
 	// ring related methods
 	public void calcRingSum() {
-		ringSum = earthRing + waterRing + fireRing
-				+ airRing + voidRing;
+		ringSum = earthRing + waterRing + fireRing + airRing + voidRing;
 	}
 
 	public void calcRings() { // calculates the value of the rings
@@ -98,7 +129,7 @@ public class RPGCharacter {
 	}
 
 	// getters e setters
-	
+
 	public void setHonor(double honor) {
 		this.honor = honor;
 	}
@@ -239,5 +270,28 @@ public class RPGCharacter {
 		return clan;
 	}
 
-	
+	public int getEarthRing() {
+		return earthRing;
+	}
+
+	public int getWaterRing() {
+		return waterRing;
+	}
+
+	public int getFireRing() {
+		return fireRing;
+	}
+
+	public int getAirRing() {
+		return airRing;
+	}
+
+	public int getVoidRing() {
+		return voidRing;
+	}
+
+	public int getRank() {
+		return rank;
+	}
+
 }

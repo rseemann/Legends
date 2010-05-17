@@ -1,10 +1,8 @@
-package Ficha;
+package Skills;
 
 import java.util.ArrayList;
 
-import Interfaces.SynergyBonus;
-
-public abstract class Skill implements SynergyBonus {
+public abstract class BaseSkill {
 	private String name;
 	private int rank;
 	private ArrayList<String> emphasis;
@@ -33,6 +31,4 @@ public abstract class Skill implements SynergyBonus {
 	public ArrayList<String> getEmphasis() {
 		return emphasis;
 	}
-
-
 }
