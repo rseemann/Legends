@@ -6,6 +6,7 @@ public class RPGCharacter {
 	private String name;
 	private Family family;
 	private Skill[] skills;
+	private int skillPoints;
 	private String clan;
 	private Map wounds = new HashMap();
 	private double glory;
@@ -36,20 +37,20 @@ public class RPGCharacter {
 	private int rank;
 
 	public void calcRank() {
-		// this.rank = (Formulas)
+		this.rank = (this.ringSum*10)+(skillPoints);
 	}
 
 	// system related methods
 	// hit points
 	public void setWounds() {
-		wounds.put("Healthy", this.earthRing * 2);
-		wounds.put("Nicked", this.earthRing * 4);
-		wounds.put("Grazed", this.earthRing * 6);
-		wounds.put("Hurt", this.earthRing * 8);
-		wounds.put("Injured", this.earthRing * 10);
-		wounds.put("Crippled", this.earthRing * 12);
-		wounds.put("Down", this.earthRing * 14);
-		wounds.put("Out", this.earthRing * 19);
+		wounds.put("Healthy", earthRing * 2);
+		wounds.put("Nicked", earthRing * 4);
+		wounds.put("Grazed", earthRing * 6);
+		wounds.put("Hurt", earthRing * 8);
+		wounds.put("Injured", earthRing * 10);
+		wounds.put("Crippled", earthRing * 12);
+		wounds.put("Down", earthRing * 14);
+		wounds.put("Out", earthRing * 19);
 	}
 
 	
@@ -58,42 +59,42 @@ public class RPGCharacter {
 	
 	// ring related methods
 	public void calcRingSum() {
-		this.ringSum = this.earthRing + this.waterRing + this.fireRing
-				+ this.airRing + this.voidRing;
+		ringSum = earthRing + waterRing + fireRing
+				+ airRing + voidRing;
 	}
 
 	public void calcRings() { // calculates the value of the rings
 
 		// earth ring
-		if (this.stamina <= this.willpower) {
-			this.earthRing = this.stamina;
+		if (stamina <= willpower) {
+			earthRing = stamina;
 		} else {
-			this.earthRing = this.willpower;
+			earthRing = willpower;
 		}
 
 		// water ring
-		if (this.stength <= this.perception) {
-			this.waterRing = this.stength;
+		if (stength <= perception) {
+			waterRing = stength;
 		} else {
-			this.waterRing = this.perception;
+			waterRing = perception;
 		}
 
 		// fire ring
-		if (this.agility <= this.intelligence) {
-			this.fireRing = this.agility;
+		if (agility <= intelligence) {
+			fireRing = agility;
 		} else {
-			this.fireRing = this.intelligence;
+			fireRing = intelligence;
 		}
 
 		// air ring
-		if (this.reflexes <= this.awareness) {
-			this.airRing = this.reflexes;
+		if (reflexes <= awareness) {
+			airRing = reflexes;
 		} else {
-			this.airRing = this.awareness;
+			airRing = awareness;
 		}
 
 		// void ring
-		this.voidRing = this.voidTrait;
+		voidRing = voidTrait;
 	}
 
 	// getters e setters
