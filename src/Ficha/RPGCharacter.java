@@ -54,20 +54,34 @@ public class RPGCharacter {
 		wounds.put("Down", earthRing * 14);
 		wounds.put("Out", earthRing * 19);
 	}
-	
-	//constructor
-	
-	public void RPGCharacter(String name, String clan, int stamina, int willpower, int stength, int perception, int agility, int intelligence, int reflexes, int awareness,int voidTrait){
+
+	// constructor
+
+	public void RPGCharacter(String name, String clan, int stamina,
+			int willpower, int strength, int perception, int agility,
+			int intelligence, int reflexes, int awareness, int voidTrait) {
 		
+		this.setName(name);
+		this.setClan(clan);
+		this.setStamina(stamina);
+		this.setWillpower(willpower);
+		this.setStrength(strength);
+		this.setPerception(perception);
+		this.setAgility(agility);
+		this.setIntelligence(intelligence);
+		this.setReflexes(reflexes);
+		this.setAwareness(awareness);
+		this.setVoidTrait(voidTrait);
+				
 	}
-	
-	
-	//skills
+
+	// skills
 	public void addSkill(String name) {
 		skills.add(new Skill(name));
 	}
-	
-	public int getSkillLocation(String skillName){ //finds the location of the desired skill in the list
+
+	public int getSkillLocation(String skillName) { // finds the location of the
+													// desired skill in the list
 		int i = 0;
 		while (skillName.compareToIgnoreCase(skills.get(i).getName()) != 0) {
 			i++;
@@ -79,21 +93,17 @@ public class RPGCharacter {
 		int i = getSkillLocation(skillName);
 		return skills.get(i).getRank();
 	}
-	
+
 	public void setSkillRank(String skillName, int rank) {
 		int i = getSkillLocation(skillName);
 		this.skills.get(i).setRank(rank);
 	}
-	
-	
-	public ArrayList<Skill> getSkills(){
+
+	public ArrayList<Skill> getSkills() {
 		return skills;
 	}
-	
+
 	//
-	
-	
-	
 
 	// ring related methods
 	public void calcRingSum() {
@@ -212,7 +222,7 @@ public class RPGCharacter {
 		return willpower;
 	}
 
-	public void setStength(int stength) {
+	public void setStrength(int stength) {
 		this.stength = stength;
 	}
 
