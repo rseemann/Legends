@@ -55,6 +55,12 @@ public class RPGCharacter {
 		wounds.put("Out", earthRing * 19);
 	}
 	
+	//constructor
+	
+	public void RPGCharacter(String name, String clan, int stamina, int willpower, int stength, int perception, int agility, int intelligence, int reflexes, int awareness,int voidTrait){
+		
+	}
+	
 	
 	//skills
 	public void addSkill(String name) {
