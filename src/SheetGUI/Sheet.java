@@ -8,8 +8,18 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,6 +35,25 @@ public class Sheet {
 	private JPanel topPanel;
 	private JPanel centerPanel;
 	private JPanel rightPanel;
+	private JTextField clanField;
+	private JTextField nameField;
+	private JTextField schoolField;
+	private JTextField rankField;
+	private JTextField insightField;
+	private JTextField earthRingField;
+	private JTextField staminaField;
+	private JTextField willpowerField;
+	private JTextField waterRingField;
+	private JTextField strengthField;
+	private JTextField perceptionField;
+	private JTextField fireRingField;
+	private JTextField agilityField;
+	private JTextField intelligenceField;
+	private JTextField airRingField;
+	private JTextField reflexesField;
+	private JTextField awarenessField;
+	private JTextField voidRingField;
+	private JTextField pointsSpentField;
 
 	// 1024x768
 
@@ -56,20 +85,20 @@ public class Sheet {
 		tpi.insets = new Insets(10, 0, 0, 0);
 
 		JLabel nameLabel = new JLabel("Name: ");
-		JTextField nameField = new JTextField(16);
+		nameField = new JTextField(16);
 
 		JLabel clanLabel = new JLabel("Clan: ");
-		JTextField clanField = new JTextField(8);
+		clanField = new JTextField(8);
 
 		JLabel schoolLabel = new JLabel("School: ");
-		JTextField schoolField = new JTextField(10);
+		schoolField = new JTextField(10);
 
 		JLabel rankLabel = new JLabel("Rank: ");
-		JTextField rankField = new JTextField(String.valueOf(new RPGCharacter()
-				.getRank()), 1);
+		rankField = new JTextField(
+				String.valueOf(new RPGCharacter().getRank()), 1);
 
 		JLabel insightLabel = new JLabel("Insight Rank: ");
-		JTextField insightField = new JTextField(3);
+		insightField = new JTextField(3);
 
 		tpi.ipadx = 10;
 		tpi.gridx = 0;
@@ -129,11 +158,11 @@ public class Sheet {
 		tpr.insets = new Insets(3, 0, 0, 0);
 
 		JLabel earthRingLabel = new JLabel("Earth: ");
-		JTextField earthRingField = new JTextField(3);
+		earthRingField = new JTextField(3);
 		JLabel staminaLabel = new JLabel("Stamina: ");
-		JTextField staminaField = new JTextField(3);
+		staminaField = new JTextField(3);
 		JLabel willpowerLabel = new JLabel("Willpower: ");
-		JTextField willpowerField = new JTextField(3);
+		willpowerField = new JTextField(3);
 		tpr.gridwidth = 1;
 
 		tpr.gridy = 1;
@@ -169,11 +198,11 @@ public class Sheet {
 		tpr.insets = new Insets(3, 0, 0, 0);
 
 		JLabel waterRingLabel = new JLabel("Water: ");
-		JTextField waterRingField = new JTextField(3);
+		waterRingField = new JTextField(3);
 		JLabel strengthLabel = new JLabel("Strength: ");
-		JTextField strengthField = new JTextField(3);
+		strengthField = new JTextField(3);
 		JLabel perceptionLabel = new JLabel("Perception: ");
-		JTextField perceptionField = new JTextField(3);
+		perceptionField = new JTextField(3);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -210,11 +239,11 @@ public class Sheet {
 
 		tpr.gridwidth = 1;
 		JLabel fireRingLabel = new JLabel("Fire: ");
-		JTextField fireRingField = new JTextField(3);
+		fireRingField = new JTextField(3);
 		JLabel agilityLabel = new JLabel("Agility: ");
-		JTextField agilityField = new JTextField(3);
+		agilityField = new JTextField(3);
 		JLabel intelligenceLabel = new JLabel("Intelligence: ");
-		JTextField intelligenceField = new JTextField(3);
+		intelligenceField = new JTextField(3);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -251,11 +280,11 @@ public class Sheet {
 		tpr.gridwidth = 1;
 
 		JLabel airRingLabel = new JLabel("Air: ");
-		JTextField airRingField = new JTextField(3);
+		airRingField = new JTextField(3);
 		JLabel reflexesLabel = new JLabel("Reflexes: ");
-		JTextField reflexesField = new JTextField(3);
+		reflexesField = new JTextField(3);
 		JLabel awarenessLabel = new JLabel("Awareness: ");
-		JTextField awarenessField = new JTextField(3);
+		awarenessField = new JTextField(3);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -293,9 +322,9 @@ public class Sheet {
 
 		JLabel voidRingLabel = new JLabel("Void: ");
 
-		JTextField voidRingField = new JTextField(3);
+		voidRingField = new JTextField(3);
 		JLabel pointsSpentLabel = new JLabel("Points Spent: ");
-		JTextField pointsSpentField = new JTextField(3);
+		pointsSpentField = new JTextField(3);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -333,16 +362,46 @@ public class Sheet {
 		pane.add(BorderLayout.CENTER, centerPanel);
 		pane.add(BorderLayout.NORTH, topPanel);
 
+		// action listeners//
+
 	}
 
-	// action listeners//
 	class SaveMenuItemListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
-			RPGCharacter character = new RPGCharacter();
+			RPGCharacter rpgChar = new RPGCharacter();
+			rpgChar.setName(nameField.getText());
+			rpgChar.setClan(clanField.getText());
+			rpgChar.setSchool(schoolField.getText());
+			rpgChar.setStamina(Integer.parseInt(staminaField.getText()));
+			rpgChar.setWillpower(Integer.parseInt(willpowerField.getText()));
+			rpgChar.setStrength(Integer.parseInt(strengthField.getText()));
+			rpgChar.setPerception(Integer.parseInt(perceptionField.getText()));
+			rpgChar.setAgility(Integer.parseInt(agilityField.getText()));
+			rpgChar.setIntelligence(Integer.parseInt(intelligenceField
+					.getText()));
+			rpgChar.setReflexes(Integer.parseInt(reflexesField.getText()));
+			rpgChar.setAwareness(Integer.parseInt(awarenessField.getText()));
+			rpgChar.setVoidTrait(Integer.parseInt(perceptionField.getText()));
+			rpgChar.calcRings();
 
+			JFileChooser saveChar = new JFileChooser();
+			saveChar.showSaveDialog(mainWindow);
+			
+			ObjectOutputStream os;
+			
+			try {
+				os = new ObjectOutputStream(new FileOutputStream(saveChar.getSelectedFile()));
+				os.writeObject(rpgChar);
+				os.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			
 		}
-
 	}
 
 	public void createNShowGUI() {

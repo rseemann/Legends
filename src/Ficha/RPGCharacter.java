@@ -1,10 +1,11 @@
 package Ficha;
 
+import java.io.Serializable;
 import java.util.*;
 
 import Skills.Skill;
 
-public class RPGCharacter {
+public class RPGCharacter implements Serializable{
 	private String name;
 	private Family family;
 	private ArrayList<Skill> skills = new ArrayList<Skill>();
@@ -16,6 +17,8 @@ public class RPGCharacter {
 	private double status;
 	private double taint;
 	private int experiencePoints;
+	private String school;
+	
 
 	// traits
 	private int stamina;
@@ -57,7 +60,7 @@ public class RPGCharacter {
 
 	// constructor
 
-	public void RPGCharacter(String name, String clan, int stamina,
+	/*public void RPGCharacter(String name, String clan, int stamina,
 			int willpower, int strength, int perception, int agility,
 			int intelligence, int reflexes, int awareness, int voidTrait) {
 		
@@ -73,7 +76,7 @@ public class RPGCharacter {
 		this.setAwareness(awareness);
 		this.setVoidTrait(voidTrait);
 				
-	}
+	}*/
 
 	// skills
 	public void addSkill(String name) {
@@ -308,6 +311,14 @@ public class RPGCharacter {
 
 	public int getRank() {
 		return rank;
+	}
+
+	public void setSchool(String school) {
+		this.school = school;
+	}
+
+	public String getSchool() {
+		return school;
 	}
 
 }

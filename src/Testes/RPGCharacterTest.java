@@ -45,6 +45,12 @@ public class RPGCharacterTest {
 		System.out.println(rpgChar.getSkills());
 	}
 	
+	@Test
+	public void testVoidRing() {
+		rpgChar.setVoidTrait(20);
+		rpgChar.calcRings();
+		assertEquals(20, rpgChar.getVoidRing());
+	}
 	
 	
 }
