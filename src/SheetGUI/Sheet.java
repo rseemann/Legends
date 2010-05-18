@@ -55,7 +55,7 @@ public class Sheet {
 	private JTextField voidRingField;
 	private JTextField pointsSpentField;
 
-	// 1024x768???
+	// 1024x768?
 
 	public void addMainWindowItems(Container pane) {
 
