@@ -61,7 +61,7 @@ public class RPGCharacter {
 		skills.add(new Skill(name));
 	}
 	
-	public int getSkillLocation(String skillName){
+	public int getSkillLocation(String skillName){ //finds the location of the desired skill in the list
 		int i = 0;
 		while (skillName.compareToIgnoreCase(skills.get(i).getName()) != 0) {
 			i++;

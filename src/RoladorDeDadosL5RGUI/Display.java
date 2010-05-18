@@ -35,7 +35,6 @@ public class Display {
 		// ----panel Layout---
 
 		panel = new JPanel(new GridBagLayout());
-		panel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		panel.setBackground(Color.darkGray);
 
@@ -48,7 +47,7 @@ public class Display {
 		boxRolar.addActionListener(new BoxRola());
 		JComboBox boxSegurar = new JComboBox(nOfDicesKeep);
 		boxSegurar.addActionListener(new BoxSegura());
-
+		
 		c.weightx = 0.5;
 		c.ipadx = 10;
 		c.gridx = 0;

@@ -43,11 +43,8 @@ public class RPGCharacterTest {
 		rpgChar.addSkill("Kenjutsu");
 		rpgChar.setSkillRank("kenJUtsu", 5);
 		System.out.println(rpgChar.getSkills());
-		
 	}
 	
-
-
 	
-
+	
 }
