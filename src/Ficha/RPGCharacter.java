@@ -47,7 +47,7 @@ public class RPGCharacter implements Serializable{
 
 	// system related methods
 	// hit points
-	public void setWounds() {
+	public void setWounds(int earthRing) {
 		wounds.put("Healthy", earthRing * 2);
 		wounds.put("Nicked", earthRing * 4);
 		wounds.put("Grazed", earthRing * 6);
@@ -56,6 +56,11 @@ public class RPGCharacter implements Serializable{
 		wounds.put("Crippled", earthRing * 12);
 		wounds.put("Down", earthRing * 14);
 		wounds.put("Out", earthRing * 19);
+	}
+	
+	public Map getWounds(){
+		return wounds;
+		
 	}
 
 	// constructor

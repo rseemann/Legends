@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -30,30 +31,31 @@ import javax.swing.JTextField;
 import Ficha.RPGCharacter;
 
 public class Sheet implements FocusListener {
-	private RPGCharacter loadedCharacter;
 	private JFrame mainWindow;
 	private JPanel topPanel;
 	private JPanel centerPanel;
 	private JPanel rightPanel;
-	protected JTextField clanField;
-	protected JTextField nameField;
-	protected JTextField schoolField;
-	protected JTextField rankField;
-	protected JTextField insightField;
-	protected JTextField earthRingField;
-	protected JTextField staminaField;
-	protected JTextField willpowerField;
-	protected JTextField waterRingField;
-	protected JTextField strengthField;
-	protected JTextField perceptionField;
-	protected JTextField fireRingField;
-	protected JTextField agilityField;
-	protected JTextField intelligenceField;
-	protected JTextField airRingField;
-	protected JTextField reflexesField;
-	protected JTextField awarenessField;
-	protected JTextField voidRingField;
-	protected JTextField pointsSpentField;
+	private JTextField clanField;
+	private JTextField nameField;
+	private JTextField schoolField;
+	private JTextField rankField;
+	private JTextField insightField;
+	private JTextField earthRingField;
+	private JTextField staminaField;
+	private JTextField willpowerField;
+	private JTextField waterRingField;
+	private JTextField strengthField;
+	private JTextField perceptionField;
+	private JTextField fireRingField;
+	private JTextField agilityField;
+	private JTextField intelligenceField;
+	private JTextField airRingField;
+	private JTextField reflexesField;
+	private JTextField awarenessField;
+	private JTextField voidRingField;
+	private JTextField pointsSpentField;
+	private NewRPGCharacter updater = new NewRPGCharacter();
+	private RPGCharacter activeCharacter;
 
 	// 1024x768?
 
@@ -74,6 +76,47 @@ public class Sheet implements FocusListener {
 		mainWindow.setJMenuBar(menuBar);
 
 		// -----top panel-----
+
+		topPanel = CreateTopPanel();
+
+		// skills panel
+		centerPanel = CreateCenterPanel();
+
+		// abilities panel
+		rightPanel = CreateRightPanel();
+
+		// adding panels
+		pane.add(BorderLayout.EAST, rightPanel);
+		pane.add(BorderLayout.CENTER, centerPanel);
+		pane.add(BorderLayout.NORTH, topPanel);
+
+	}
+
+	private JPanel CreateRightPanel() {
+		rightPanel = new JPanel();
+		rightPanel.setLayout(new GridBagLayout());
+		GridBagConstraints ap = new GridBagConstraints();
+
+		activeCharacter = updater.generateCharacterFromSheet();
+		
+		
+
+		JLabel woundsTitle = new JLabel("Wounds");
+		rightPanel.add(woundsTitle);
+		rightPanel.setBackground(Color.orange);
+
+		return rightPanel;
+	}
+
+	private JPanel CreateCenterPanel() {
+		centerPanel = new JPanel(new GridBagLayout());
+		// GridBagConstraints sp = new GridBagConstraints();
+		centerPanel.setBackground(Color.red);
+		return centerPanel;
+	}
+
+	// creates the top panel
+	private JPanel CreateTopPanel() {
 		topPanel = new JPanel(new BorderLayout());
 		topPanel.setBackground(Color.lightGray);
 
@@ -85,13 +128,13 @@ public class Sheet implements FocusListener {
 		tpi.insets = new Insets(10, 0, 0, 0);
 
 		JLabel nameLabel = new JLabel("Name: ");
-		nameField = new JTextField(16);
+		nameField = new JTextField("",16);
 
 		JLabel clanLabel = new JLabel("Clan: ");
-		clanField = new JTextField(8);
+		clanField = new JTextField("",8);
 
 		JLabel schoolLabel = new JLabel("School: ");
-		schoolField = new JTextField(10);
+		schoolField = new JTextField("",10);
 
 		JLabel rankLabel = new JLabel("Rank: ");
 		rankField = new JTextField("0", 1);
@@ -129,8 +172,7 @@ public class Sheet implements FocusListener {
 
 		tpi.gridx = 9;
 		topPanelInfo.add(insightField, tpi);
-		
-				
+
 		// ----Character Traits and Rings Panel----
 		JPanel topPanelRings = new JPanel(new GridBagLayout());
 		GridBagConstraints tpr = new GridBagConstraints();
@@ -356,28 +398,10 @@ public class Sheet implements FocusListener {
 		tpr.gridx = 9;
 		topPanelRings.add(pointsSpentField, tpr);
 
-		
 		// addings panels to topPanel
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
-
-		// skills panel
-		centerPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints sp = new GridBagConstraints();
-		centerPanel.setBackground(Color.red);
-
-		// abilities panel
-		rightPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints ap = new GridBagConstraints();
-		rightPanel.setBackground(Color.orange);
-
-		// adding panels
-		pane.add(BorderLayout.WEST, rightPanel);
-		pane.add(BorderLayout.CENTER, centerPanel);
-		pane.add(BorderLayout.NORTH, topPanel);
-
-		// action listeners//
-
+		return topPanel;
 	}
 
 	class NewRPGCharacter {
@@ -385,8 +409,15 @@ public class Sheet implements FocusListener {
 
 		RPGCharacter tmpChar = new RPGCharacter();
 
+		public void updateAll() {
+			updateTopFields(); // first fields with traits and info
+			updateRings(); // only then rings can be updated
+			updateWounds();
+			activeCharacter = updater.generateCharacterFromSheet();
+		}
+
 		public RPGCharacter generateCharacterFromSheet() {
-			
+
 			tmpChar.setName(nameField.getText());
 			tmpChar.setClan(clanField.getText());
 			tmpChar.setSchool(schoolField.getText());
@@ -405,27 +436,26 @@ public class Sheet implements FocusListener {
 
 		}
 
-		public void updateCharacter() {
-			nameField.setText(loadedCharacter.getName());
-			clanField.setText(loadedCharacter.getClan());
-			schoolField.setText(loadedCharacter.getSchool());
-			staminaField.setText(String.valueOf(loadedCharacter.getStamina()));
-			willpowerField.setText(String.valueOf(loadedCharacter
+		public void updateTopFields() { // not updating the rings' values, use
+			// updateRings() instead
+			nameField.setText(activeCharacter.getName());
+			clanField.setText(activeCharacter.getClan());
+			schoolField.setText(activeCharacter.getSchool());
+			staminaField.setText(String.valueOf(activeCharacter.getStamina()));
+			willpowerField.setText(String.valueOf(activeCharacter
 					.getWillpower()));
-			strengthField.setText(String.valueOf(loadedCharacter.getStength()));
-			perceptionField.setText(String.valueOf(loadedCharacter
+			strengthField.setText(String.valueOf(activeCharacter.getStength()));
+			perceptionField.setText(String.valueOf(activeCharacter
 					.getPerception()));
-			agilityField.setText(String.valueOf(loadedCharacter.getAgility()));
-			intelligenceField.setText(String.valueOf(loadedCharacter
+			agilityField.setText(String.valueOf(activeCharacter.getAgility()));
+			intelligenceField.setText(String.valueOf(activeCharacter
 					.getIntelligence()));
 			reflexesField
-					.setText(String.valueOf(loadedCharacter.getReflexes()));
-			awarenessField.setText(String.valueOf(loadedCharacter
+					.setText(String.valueOf(activeCharacter.getReflexes()));
+			awarenessField.setText(String.valueOf(activeCharacter
 					.getAwareness()));
 			voidRingField.setText(String
-					.valueOf(loadedCharacter.getVoidTrait()));
-
-			updateRings();
+					.valueOf(activeCharacter.getVoidTrait()));
 
 		}
 
@@ -446,8 +476,15 @@ public class Sheet implements FocusListener {
 			voidRingField.setText(String.valueOf(tempRPGCharToUpdateRings
 					.getVoidRing()));
 		}
+
+		public void updateWounds() {
+			activeCharacter.setWounds(Integer.parseInt(earthRingField.getText()));
+			activeCharacter.getWounds();
+			System.out.println(activeCharacter.getWounds());
+		}
 	}
 
+	// action listeners//
 	class SaveMenuItemListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
@@ -485,9 +522,9 @@ public class Sheet implements FocusListener {
 				ObjectInputStream is = new ObjectInputStream(
 						new FileInputStream(loadChar.getSelectedFile()));
 
-				loadedCharacter = (RPGCharacter) is.readObject();
+				activeCharacter = (RPGCharacter) is.readObject();
 
-				new NewRPGCharacter().updateCharacter();
+				updater.updateAll();
 
 				is.close();
 			} catch (FileNotFoundException e) {
@@ -522,7 +559,8 @@ public class Sheet implements FocusListener {
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		new NewRPGCharacter().updateRings();
+		updater.updateRings();
+		updater.updateWounds();
 
 	}
 
