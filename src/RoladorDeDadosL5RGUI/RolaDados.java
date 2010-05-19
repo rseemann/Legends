@@ -16,8 +16,8 @@ public class RolaDados {
 	private int maximoDeDadosSegurados = 10;
 	private ArrayList imprimir = new ArrayList();
 	private String mensagemErro;
-	private int bonusRolagem;
-
+	private int keepingBonus;
+	
 	// ----- methods ------------
 	public int rolaDado() {
 		this.rolagem = (1 + (int) (Math.random() * 10));
@@ -29,7 +29,7 @@ public class RolaDados {
 	}
 	
 
-	public ArrayList<Integer> fazRolagem(int dadosRolados, int dadosSegurados) {
+	public ArrayList<Integer> fazRolagem(int dadosRolados, int dadosSegurados, int bonus) {
 		// Informa quantos dados estãoo sendo rolados e os rola
 		rolagensSeguradas.clear();
 		rolls.clear();
@@ -37,7 +37,7 @@ public class RolaDados {
 		rolagem = 0;
 		numeroDeDez = 0;
 		somaDaRolagem = 0;
-		bonusRolagem = 0;
+		keepingBonus = 0;
 		
 		if (dadosRolados > 10) {
 			dadosSegurados += (int) (dadosRolados - 10) / 2;
@@ -47,7 +47,7 @@ public class RolaDados {
 		
 		if (dadosSegurados > maximoDeDadosSegurados) {
 			//mensagemErro = "A maior rolagem possível é de 10k10.\n(Lembrando que para 2 dados rolados acima de 10, você segura um dado a mais...) \nInsira nova rolagem.";
-			bonusRolagem = (dadosSegurados - maximoDeDadosSegurados)*5;
+			keepingBonus = (dadosSegurados - maximoDeDadosSegurados)*5;
 			dadosSegurados = maximoDeDadosSegurados;
 		}
 		
@@ -95,14 +95,26 @@ public class RolaDados {
 		imprimir.add("Resultado Final das Rolagens");
 		imprimir.add(rolagensSeguradas);
 		
-		if (bonusRolagem != 0){
-			imprimir.add("\n+"+bonusRolagem+" (por segurar mais do que 10 dados)\n");
-			String teste = "lalala";
-			
-			imprimir.add("Soma da rolagem: " + (somaDaRolagem + bonusRolagem));
+		if (keepingBonus != 0){
+			if (bonus == 0){
+			imprimir.add("\n+"+keepingBonus+" (por segurar mais do que 10 dados)\n");
+			imprimir.add("Soma da rolagem: " + (somaDaRolagem + keepingBonus));
+			}
+			else{
+				imprimir.add("\n+"+keepingBonus+" (por segurar mais do que 10 dados)\n");
+				imprimir.add("+"+bonus+" (Bonus)"+"\n");
+				imprimir.add("Soma da rolagem: " + (somaDaRolagem + keepingBonus+bonus));
+			}
 		}
 		else{
-			imprimir.add("\nSoma da rolagem: " + somaDaRolagem+"\n");
+			if (bonus == 0){
+				imprimir.add("\nSoma da rolagem: " + (somaDaRolagem) +"\n");
+			}
+			else{
+				imprimir.add("\n+"+bonus+" (Bonus)");
+				imprimir.add("\nSoma da rolagem: " + (somaDaRolagem+bonus) +"\n");
+			}
+			
 		}
 		
 		return rolls;

@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 public class Display {
@@ -28,9 +30,11 @@ public class Display {
 	private String[] nOfDicesKeep = new String[20];
 	private JComboBox boxToRoll;
 	private JComboBox boxToKeep;
+	private JTextField bonusField;
+	private int bonus;
 	int rolledDices = 1;
 	int keptDices = 1;
-
+	
 	public void adicionaElementos(Container pane) {
 		// ----panel Layout---
 
@@ -48,7 +52,7 @@ public class Display {
 		JComboBox boxSegurar = new JComboBox(nOfDicesKeep);
 		boxSegurar.addActionListener(new BoxSegura());
 		
-		c.weightx = 0.5;
+		c.weightx = 50;
 		c.ipadx = 10;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -67,7 +71,21 @@ public class Display {
 		c.gridx = 2;
 		c.gridy = 0;
 		panel.add(boxSegurar, c);
-
+		
+		//bonus field
+		c.insets = new Insets(20, 0, 0, 0);
+		c.weightx = 0;
+		c.gridx = 0;
+		c.gridy = 1;
+		JLabel bonusLabel = new JLabel("Bonus: +");
+		bonusLabel.setForeground(Color.white);
+		panel.add(bonusLabel,c);
+		c.gridx = 1;
+		c.gridy = 1;
+		bonusField = new JTextField("0",3);
+		panel.add(bonusField,c);
+		
+	
 		// -----botão de rolagem-------
 		JButton botaoRola = new JButton("Rola!");
 		botaoRola.addActionListener(new BotaoRola());
@@ -78,7 +96,7 @@ public class Display {
 		c.ipady = 10;
 		c.gridwidth = 3;
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 2;
 		panel.add(botaoRola, c);
 
 		// -----botao de limpar------
@@ -137,8 +155,8 @@ public class Display {
 			// Integer.parseInt((String)(boxRolar.getSelectedItem()));
 			// int dadosSegurados =
 			// Integer.parseInt((String)(boxSegurar.getSelectedItem()));;
-
-			rolagem.fazRolagem(rolledDices, keptDices);
+			bonus = Integer.parseInt(bonusField.getText());
+			rolagem.fazRolagem(rolledDices, keptDices, bonus);
 			rollingTxtArea
 					.append("--------------------------------------------\n");
 			for (int i = 0; i < rolagem.getImprimir().size(); i++) {

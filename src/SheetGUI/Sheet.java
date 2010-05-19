@@ -99,10 +99,24 @@ public class Sheet implements FocusListener {
 
 		activeCharacter = updater.generateCharacterFromSheet();
 		
+		JLabel woundsTitle = new JLabel("Wound lvl");
+		ap.insets = new Insets(10, 10, 5, 5);
+		ap.gridx = 0;
+		ap.gridy = 0;
+		rightPanel.add(woundsTitle,ap);
 		
-
-		JLabel woundsTitle = new JLabel("Wounds");
-		rightPanel.add(woundsTitle);
+		JLabel woundsMaxPerLevel = new JLabel("Total");
+		ap.gridx = 1;
+		rightPanel.add(woundsMaxPerLevel,ap);
+		
+		JLabel currentDmg =  new JLabel ("Current Dmg");
+		ap.gridx=2;
+		rightPanel.add(currentDmg,ap);
+		
+		
+		
+		
+		
 		rightPanel.setBackground(Color.orange);
 
 		return rightPanel;
