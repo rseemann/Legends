@@ -10,10 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -27,7 +30,8 @@ import javax.swing.JTextField;
 
 import Ficha.RPGCharacter;
 
-public class Sheet implements FocusListener{
+public class Sheet implements FocusListener {
+	private RPGCharacter loadedCharacter;
 	private JFrame mainWindow;
 	private JPanel topPanel;
 	private JPanel centerPanel;
@@ -64,11 +68,12 @@ public class Sheet implements FocusListener{
 
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
-		JMenuItem newMenuItem = new JMenuItem("Edit");
+		JMenuItem loadMenuItem = new JMenuItem("Load");
+		loadMenuItem.addActionListener(new LoadMenuItemListener());
 		JMenuItem saveMenuItem = new JMenuItem("Save");
 		saveMenuItem.addActionListener(new SaveMenuItemListener());
 
-		fileMenu.add(newMenuItem);
+		fileMenu.add(loadMenuItem);
 		fileMenu.add(saveMenuItem);
 		menuBar.add(fileMenu);
 		mainWindow.setJMenuBar(menuBar);
@@ -91,8 +96,7 @@ public class Sheet implements FocusListener{
 		schoolField = new JTextField(10);
 
 		JLabel rankLabel = new JLabel("Rank: ");
-		rankField = new JTextField(
-				String.valueOf(new RPGCharacter().getRank()), 1);
+		rankField = new JTextField("0", 1);
 
 		JLabel insightLabel = new JLabel("Insight Rank: ");
 		insightField = new JTextField(3);
@@ -132,7 +136,7 @@ public class Sheet implements FocusListener{
 		JPanel topPanelRings = new JPanel(new GridBagLayout());
 		GridBagConstraints tpr = new GridBagConstraints();
 		topPanelRings.setBackground(Color.lightGray);
-		
+
 		String imagesPath = "resources/img/images/pics/";
 		JLabel earthRingJPEG = new JLabel(new ImageIcon(imagesPath
 				+ "RingOfEarth.jpg"));
@@ -158,9 +162,9 @@ public class Sheet implements FocusListener{
 		earthRingField = new JTextField("0", 3);
 		earthRingField.setEditable(false);
 		JLabel staminaLabel = new JLabel("Stamina: ");
-		staminaField = new JTextField("0",3);
+		staminaField = new JTextField("0", 3);
 		staminaField.addFocusListener(this);
-		
+
 		JLabel willpowerLabel = new JLabel("Willpower: ");
 		willpowerField = new JTextField("0", 3);
 		willpowerField.addFocusListener(this);
@@ -199,13 +203,13 @@ public class Sheet implements FocusListener{
 		tpr.insets = new Insets(3, 0, 0, 0);
 
 		JLabel waterRingLabel = new JLabel("Water: ");
-		waterRingField = new JTextField("0",3);
+		waterRingField = new JTextField("0", 3);
 		waterRingField.setEditable(false);
 		JLabel strengthLabel = new JLabel("Strength: ");
-		strengthField = new JTextField("0",3);
+		strengthField = new JTextField("0", 3);
 		strengthField.addFocusListener(this);
 		JLabel perceptionLabel = new JLabel("Perception: ");
-		perceptionField = new JTextField("0",3);
+		perceptionField = new JTextField("0", 3);
 		perceptionField.addFocusListener(this);
 
 		tpr.gridwidth = 1;
@@ -243,13 +247,13 @@ public class Sheet implements FocusListener{
 
 		tpr.gridwidth = 1;
 		JLabel fireRingLabel = new JLabel("Fire: ");
-		fireRingField = new JTextField("0",3);
+		fireRingField = new JTextField("0", 3);
 		fireRingField.setEditable(false);
 		JLabel agilityLabel = new JLabel("Agility: ");
-		agilityField = new JTextField("0",3);
+		agilityField = new JTextField("0", 3);
 		agilityField.addFocusListener(this);
 		JLabel intelligenceLabel = new JLabel("Intelligence: ");
-		intelligenceField = new JTextField("0",3);
+		intelligenceField = new JTextField("0", 3);
 		intelligenceField.addFocusListener(this);
 
 		tpr.gridwidth = 1;
@@ -287,13 +291,13 @@ public class Sheet implements FocusListener{
 		tpr.gridwidth = 1;
 
 		JLabel airRingLabel = new JLabel("Air: ");
-		airRingField = new JTextField("0",3);
+		airRingField = new JTextField("0", 3);
 		airRingField.setEditable(false);
 		JLabel reflexesLabel = new JLabel("Reflexes: ");
-		reflexesField = new JTextField("0",3);
+		reflexesField = new JTextField("0", 3);
 		reflexesField.addFocusListener(this);
 		JLabel awarenessLabel = new JLabel("Awareness: ");
-		awarenessField = new JTextField("0",3);
+		awarenessField = new JTextField("0", 3);
 		awarenessField.addFocusListener(this);
 
 		tpr.gridwidth = 1;
@@ -332,9 +336,9 @@ public class Sheet implements FocusListener{
 
 		JLabel voidRingLabel = new JLabel("Void: ");
 
-		voidRingField = new JTextField("0",3);
+		voidRingField = new JTextField("0", 3);
 		JLabel pointsSpentLabel = new JLabel("Points Spent: ");
-		pointsSpentField = new JTextField("0",3);
+		pointsSpentField = new JTextField("0", 3);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -353,7 +357,6 @@ public class Sheet implements FocusListener{
 		tpr.gridx = 9;
 		topPanelRings.add(pointsSpentField, tpr);
 
-				
 		// addings panels to topPanel
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
@@ -378,10 +381,11 @@ public class Sheet implements FocusListener{
 	}
 
 	class NewRPGCharacter{
+		//this class exists only to get the data inserted in the sheet
 		
-		public RPGCharacter generateCharacter(){
+		public RPGCharacter generateCharacter() {
 			RPGCharacter rpgChar = new RPGCharacter();
-			
+
 			rpgChar.setName(nameField.getText());
 			rpgChar.setClan(clanField.getText());
 			rpgChar.setSchool(schoolField.getText());
@@ -399,23 +403,27 @@ public class Sheet implements FocusListener{
 			return rpgChar;
 		}
 		
+		public void updateCharacter(){
+			nameField.setText(loadedCharacter.getName());
+			
+		}
+
 	}
-	
+
 	class SaveMenuItemListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
-			
-			NewRPGCharacter newChar = new NewRPGCharacter();
-			
-			newChar.generateCharacter();
-			
+
+			RPGCharacter newChar = new NewRPGCharacter().generateCharacter();
+
 			JFileChooser saveChar = new JFileChooser();
 			saveChar.showSaveDialog(mainWindow);
-			
+
 			ObjectOutputStream os;
-			
+
 			try {
-				os = new ObjectOutputStream(new FileOutputStream(saveChar.getSelectedFile()));
+				os = new ObjectOutputStream(new FileOutputStream(saveChar
+						.getSelectedFile()));
 				os.writeObject(newChar);
 				os.close();
 			} catch (FileNotFoundException e) {
@@ -424,6 +432,32 @@ public class Sheet implements FocusListener{
 				e.printStackTrace();
 			}
 
+		}
+	}
+
+	class LoadMenuItemListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+
+			JFileChooser loadChar = new JFileChooser();
+			loadChar.showSaveDialog(mainWindow);
+
+			try {
+				ObjectInputStream is = new ObjectInputStream(new FileInputStream(loadChar.getSelectedFile()));
+				
+				loadedCharacter = (RPGCharacter)is.readObject();
+				
+				new NewRPGCharacter().updateCharacter();
+				
+				is.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			
 			
 		}
 	}
@@ -432,7 +466,6 @@ public class Sheet implements FocusListener{
 
 		mainWindow = new JFrame("Character Sheet");
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// mainWindow.setSize(200, 200);
 
 		// Set up the content pane.
 		addMainWindowItems(mainWindow.getContentPane());
@@ -442,31 +475,38 @@ public class Sheet implements FocusListener{
 		mainWindow.setVisible(true);
 
 	}
+	
+
+
+@Override
+public void focusGained(FocusEvent arg0) {
+
+}
+
+@Override
+public void focusLost(FocusEvent arg0) {
+	RPGCharacter tempRPGChar = new NewRPGCharacter().generateCharacter(); // necessary
+																			// to
+																			// update
+																			// the
+																			// ring
+																			// values
+	tempRPGChar.calcRings();
+	earthRingField.setText(String.valueOf(tempRPGChar.getEarthRing()));
+	waterRingField.setText(String.valueOf(tempRPGChar.getWaterRing()));
+	fireRingField.setText(String.valueOf(tempRPGChar.getFireRing()));
+	airRingField.setText(String.valueOf(tempRPGChar.getAirRing()));
+	voidRingField.setText(String.valueOf(tempRPGChar.getVoidRing()));
+
+	System.out.println(tempRPGChar.getEarthRing());
+
+}
 
 	public static void main(String[] args) {
 		Sheet gui = new Sheet();
 		gui.createNShowGUI();
-		
 
-	}
+	
 
-	@Override
-	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void focusLost(FocusEvent arg0) {
-		RPGCharacter tempRPGChar = new NewRPGCharacter().generateCharacter(); //necessary to update the ring values	
-		tempRPGChar.calcRings();
-		earthRingField.setText(String.valueOf(tempRPGChar.getEarthRing()));
-		waterRingField.setText(String.valueOf(tempRPGChar.getWaterRing()));
-		fireRingField.setText(String.valueOf(tempRPGChar.getFireRing()));
-		airRingField.setText(String.valueOf(tempRPGChar.getAirRing()));
-		voidRingField.setText(String.valueOf(tempRPGChar.getVoidRing()));
-		
-		System.out.println(tempRPGChar.getEarthRing());
-			
-	}
-
+}
 }
