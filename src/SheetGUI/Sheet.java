@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +27,7 @@ import javax.swing.JTextField;
 
 import Ficha.RPGCharacter;
 
-public class Sheet {
+public class Sheet implements FocusListener{
 	private JFrame mainWindow;
 	private JPanel topPanel;
 	private JPanel centerPanel;
@@ -130,7 +132,7 @@ public class Sheet {
 		JPanel topPanelRings = new JPanel(new GridBagLayout());
 		GridBagConstraints tpr = new GridBagConstraints();
 		topPanelRings.setBackground(Color.lightGray);
-
+		
 		String imagesPath = "resources/img/images/pics/";
 		JLabel earthRingJPEG = new JLabel(new ImageIcon(imagesPath
 				+ "RingOfEarth.jpg"));
@@ -153,11 +155,15 @@ public class Sheet {
 		tpr.insets = new Insets(3, 0, 0, 0);
 
 		JLabel earthRingLabel = new JLabel("Earth: ");
-		earthRingField = new JTextField(3);
+		earthRingField = new JTextField("0", 3);
+		earthRingField.setEditable(false);
 		JLabel staminaLabel = new JLabel("Stamina: ");
-		staminaField = new JTextField(3);
+		staminaField = new JTextField("0",3);
+		staminaField.addFocusListener(this);
+		
 		JLabel willpowerLabel = new JLabel("Willpower: ");
-		willpowerField = new JTextField(3);
+		willpowerField = new JTextField("0", 3);
+		willpowerField.addFocusListener(this);
 		tpr.gridwidth = 1;
 
 		tpr.gridy = 1;
@@ -193,11 +199,14 @@ public class Sheet {
 		tpr.insets = new Insets(3, 0, 0, 0);
 
 		JLabel waterRingLabel = new JLabel("Water: ");
-		waterRingField = new JTextField(3);
+		waterRingField = new JTextField("0",3);
+		waterRingField.setEditable(false);
 		JLabel strengthLabel = new JLabel("Strength: ");
-		strengthField = new JTextField(3);
+		strengthField = new JTextField("0",3);
+		strengthField.addFocusListener(this);
 		JLabel perceptionLabel = new JLabel("Perception: ");
-		perceptionField = new JTextField(3);
+		perceptionField = new JTextField("0",3);
+		perceptionField.addFocusListener(this);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -234,11 +243,14 @@ public class Sheet {
 
 		tpr.gridwidth = 1;
 		JLabel fireRingLabel = new JLabel("Fire: ");
-		fireRingField = new JTextField(3);
+		fireRingField = new JTextField("0",3);
+		fireRingField.setEditable(false);
 		JLabel agilityLabel = new JLabel("Agility: ");
-		agilityField = new JTextField(3);
+		agilityField = new JTextField("0",3);
+		agilityField.addFocusListener(this);
 		JLabel intelligenceLabel = new JLabel("Intelligence: ");
-		intelligenceField = new JTextField(3);
+		intelligenceField = new JTextField("0",3);
+		intelligenceField.addFocusListener(this);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -275,11 +287,14 @@ public class Sheet {
 		tpr.gridwidth = 1;
 
 		JLabel airRingLabel = new JLabel("Air: ");
-		airRingField = new JTextField(3);
+		airRingField = new JTextField("0",3);
+		airRingField.setEditable(false);
 		JLabel reflexesLabel = new JLabel("Reflexes: ");
-		reflexesField = new JTextField(3);
+		reflexesField = new JTextField("0",3);
+		reflexesField.addFocusListener(this);
 		JLabel awarenessLabel = new JLabel("Awareness: ");
-		awarenessField = new JTextField(3);
+		awarenessField = new JTextField("0",3);
+		awarenessField.addFocusListener(this);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -317,9 +332,9 @@ public class Sheet {
 
 		JLabel voidRingLabel = new JLabel("Void: ");
 
-		voidRingField = new JTextField(3);
+		voidRingField = new JTextField("0",3);
 		JLabel pointsSpentLabel = new JLabel("Points Spent: ");
-		pointsSpentField = new JTextField(3);
+		pointsSpentField = new JTextField("0",3);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -338,6 +353,7 @@ public class Sheet {
 		tpr.gridx = 9;
 		topPanelRings.add(pointsSpentField, tpr);
 
+				
 		// addings panels to topPanel
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
@@ -361,10 +377,11 @@ public class Sheet {
 
 	}
 
-	class SaveMenuItemListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent arg0) {
+	class NewRPGCharacter{
+		
+		public RPGCharacter generateCharacter(){
 			RPGCharacter rpgChar = new RPGCharacter();
+			
 			rpgChar.setName(nameField.getText());
 			rpgChar.setClan(clanField.getText());
 			rpgChar.setSchool(schoolField.getText());
@@ -377,9 +394,21 @@ public class Sheet {
 					.getText()));
 			rpgChar.setReflexes(Integer.parseInt(reflexesField.getText()));
 			rpgChar.setAwareness(Integer.parseInt(awarenessField.getText()));
-			rpgChar.setVoidTrait(Integer.parseInt(perceptionField.getText()));
+			rpgChar.setVoidTrait(Integer.parseInt(voidRingField.getText()));
 			rpgChar.calcRings();
+			return rpgChar;
+		}
+		
+	}
+	
+	class SaveMenuItemListener implements ActionListener {
 
+		public void actionPerformed(ActionEvent arg0) {
+			
+			NewRPGCharacter newChar = new NewRPGCharacter();
+			
+			newChar.generateCharacter();
+			
 			JFileChooser saveChar = new JFileChooser();
 			saveChar.showSaveDialog(mainWindow);
 			
@@ -387,7 +416,7 @@ public class Sheet {
 			
 			try {
 				os = new ObjectOutputStream(new FileOutputStream(saveChar.getSelectedFile()));
-				os.writeObject(rpgChar);
+				os.writeObject(newChar);
 				os.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -417,7 +446,27 @@ public class Sheet {
 	public static void main(String[] args) {
 		Sheet gui = new Sheet();
 		gui.createNShowGUI();
+		
 
+	}
+
+	@Override
+	public void focusGained(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		RPGCharacter tempRPGChar = new NewRPGCharacter().generateCharacter(); //necessary to update the ring values	
+		tempRPGChar.calcRings();
+		earthRingField.setText(String.valueOf(tempRPGChar.getEarthRing()));
+		waterRingField.setText(String.valueOf(tempRPGChar.getWaterRing()));
+		fireRingField.setText(String.valueOf(tempRPGChar.getFireRing()));
+		airRingField.setText(String.valueOf(tempRPGChar.getAirRing()));
+		voidRingField.setText(String.valueOf(tempRPGChar.getVoidRing()));
+		
+		System.out.println(tempRPGChar.getEarthRing());
+			
 	}
 
 }
