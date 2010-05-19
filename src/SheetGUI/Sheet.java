@@ -16,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -36,33 +35,29 @@ public class Sheet implements FocusListener {
 	private JPanel topPanel;
 	private JPanel centerPanel;
 	private JPanel rightPanel;
-	private JTextField clanField;
-	private JTextField nameField;
-	private JTextField schoolField;
-	private JTextField rankField;
-	private JTextField insightField;
-	private JTextField earthRingField;
-	private JTextField staminaField;
-	private JTextField willpowerField;
-	private JTextField waterRingField;
-	private JTextField strengthField;
-	private JTextField perceptionField;
-	private JTextField fireRingField;
-	private JTextField agilityField;
-	private JTextField intelligenceField;
-	private JTextField airRingField;
-	private JTextField reflexesField;
-	private JTextField awarenessField;
-	private JTextField voidRingField;
-	private JTextField pointsSpentField;
+	protected JTextField clanField;
+	protected JTextField nameField;
+	protected JTextField schoolField;
+	protected JTextField rankField;
+	protected JTextField insightField;
+	protected JTextField earthRingField;
+	protected JTextField staminaField;
+	protected JTextField willpowerField;
+	protected JTextField waterRingField;
+	protected JTextField strengthField;
+	protected JTextField perceptionField;
+	protected JTextField fireRingField;
+	protected JTextField agilityField;
+	protected JTextField intelligenceField;
+	protected JTextField airRingField;
+	protected JTextField reflexesField;
+	protected JTextField awarenessField;
+	protected JTextField voidRingField;
+	protected JTextField pointsSpentField;
 
 	// 1024x768?
 
 	public void addMainWindowItems(Container pane) {
-
-		// -----top panel-----
-		topPanel = new JPanel(new BorderLayout());
-		topPanel.setBackground(Color.lightGray);
 
 		// ---menu----
 
@@ -78,8 +73,11 @@ public class Sheet implements FocusListener {
 		menuBar.add(fileMenu);
 		mainWindow.setJMenuBar(menuBar);
 
-		// -------Character Info Panel--------
+		// -----top panel-----
+		topPanel = new JPanel(new BorderLayout());
+		topPanel.setBackground(Color.lightGray);
 
+		// -------Character Info Panel--------
 		JPanel topPanelInfo = new JPanel(new GridBagLayout());
 		GridBagConstraints tpi = new GridBagConstraints();
 		topPanelInfo.setBackground(Color.lightGray);
@@ -131,7 +129,8 @@ public class Sheet implements FocusListener {
 
 		tpi.gridx = 9;
 		topPanelInfo.add(insightField, tpi);
-
+		
+				
 		// ----Character Traits and Rings Panel----
 		JPanel topPanelRings = new JPanel(new GridBagLayout());
 		GridBagConstraints tpr = new GridBagConstraints();
@@ -357,6 +356,7 @@ public class Sheet implements FocusListener {
 		tpr.gridx = 9;
 		topPanelRings.add(pointsSpentField, tpr);
 
+		
 		// addings panels to topPanel
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
@@ -380,41 +380,80 @@ public class Sheet implements FocusListener {
 
 	}
 
-	class NewRPGCharacter{
-		//this class exists only to get the data inserted in the sheet
-		
-		public RPGCharacter generateCharacter() {
-			RPGCharacter rpgChar = new RPGCharacter();
+	class NewRPGCharacter {
+		// this class exists only to get the data inserted in the sheet
 
-			rpgChar.setName(nameField.getText());
-			rpgChar.setClan(clanField.getText());
-			rpgChar.setSchool(schoolField.getText());
-			rpgChar.setStamina(Integer.parseInt(staminaField.getText()));
-			rpgChar.setWillpower(Integer.parseInt(willpowerField.getText()));
-			rpgChar.setStrength(Integer.parseInt(strengthField.getText()));
-			rpgChar.setPerception(Integer.parseInt(perceptionField.getText()));
-			rpgChar.setAgility(Integer.parseInt(agilityField.getText()));
-			rpgChar.setIntelligence(Integer.parseInt(intelligenceField
-					.getText()));
-			rpgChar.setReflexes(Integer.parseInt(reflexesField.getText()));
-			rpgChar.setAwareness(Integer.parseInt(awarenessField.getText()));
-			rpgChar.setVoidTrait(Integer.parseInt(voidRingField.getText()));
-			rpgChar.calcRings();
-			return rpgChar;
-		}
-		
-		public void updateCharacter(){
-			nameField.setText(loadedCharacter.getName());
+		RPGCharacter tmpChar = new RPGCharacter();
+
+		public RPGCharacter generateCharacterFromSheet() {
 			
+			tmpChar.setName(nameField.getText());
+			tmpChar.setClan(clanField.getText());
+			tmpChar.setSchool(schoolField.getText());
+			tmpChar.setStamina(Integer.parseInt(staminaField.getText()));
+			tmpChar.setWillpower(Integer.parseInt(willpowerField.getText()));
+			tmpChar.setStrength(Integer.parseInt(strengthField.getText()));
+			tmpChar.setPerception(Integer.parseInt(perceptionField.getText()));
+			tmpChar.setAgility(Integer.parseInt(agilityField.getText()));
+			tmpChar.setIntelligence(Integer.parseInt(intelligenceField
+					.getText()));
+			tmpChar.setReflexes(Integer.parseInt(reflexesField.getText()));
+			tmpChar.setAwareness(Integer.parseInt(awarenessField.getText()));
+			tmpChar.setVoidTrait(Integer.parseInt(voidRingField.getText()));
+			tmpChar.calcRings();
+			return tmpChar;
+
 		}
 
+		public void updateCharacter() {
+			nameField.setText(loadedCharacter.getName());
+			clanField.setText(loadedCharacter.getClan());
+			schoolField.setText(loadedCharacter.getSchool());
+			staminaField.setText(String.valueOf(loadedCharacter.getStamina()));
+			willpowerField.setText(String.valueOf(loadedCharacter
+					.getWillpower()));
+			strengthField.setText(String.valueOf(loadedCharacter.getStength()));
+			perceptionField.setText(String.valueOf(loadedCharacter
+					.getPerception()));
+			agilityField.setText(String.valueOf(loadedCharacter.getAgility()));
+			intelligenceField.setText(String.valueOf(loadedCharacter
+					.getIntelligence()));
+			reflexesField
+					.setText(String.valueOf(loadedCharacter.getReflexes()));
+			awarenessField.setText(String.valueOf(loadedCharacter
+					.getAwareness()));
+			voidRingField.setText(String
+					.valueOf(loadedCharacter.getVoidTrait()));
+
+			updateRings();
+
+		}
+
+		public void updateRings() {
+			RPGCharacter tempRPGCharToUpdateRings = new NewRPGCharacter()
+					.generateCharacterFromSheet();
+			// necessary to update the rings' values
+
+			tempRPGCharToUpdateRings.calcRings();
+			earthRingField.setText(String.valueOf(tempRPGCharToUpdateRings
+					.getEarthRing()));
+			waterRingField.setText(String.valueOf(tempRPGCharToUpdateRings
+					.getWaterRing()));
+			fireRingField.setText(String.valueOf(tempRPGCharToUpdateRings
+					.getFireRing()));
+			airRingField.setText(String.valueOf(tempRPGCharToUpdateRings
+					.getAirRing()));
+			voidRingField.setText(String.valueOf(tempRPGCharToUpdateRings
+					.getVoidRing()));
+		}
 	}
 
 	class SaveMenuItemListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
 
-			RPGCharacter newChar = new NewRPGCharacter().generateCharacter();
+			RPGCharacter tmpCharToSave = new NewRPGCharacter()
+					.generateCharacterFromSheet();
 
 			JFileChooser saveChar = new JFileChooser();
 			saveChar.showSaveDialog(mainWindow);
@@ -424,7 +463,7 @@ public class Sheet implements FocusListener {
 			try {
 				os = new ObjectOutputStream(new FileOutputStream(saveChar
 						.getSelectedFile()));
-				os.writeObject(newChar);
+				os.writeObject(tmpCharToSave);
 				os.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -440,15 +479,16 @@ public class Sheet implements FocusListener {
 		public void actionPerformed(ActionEvent arg0) {
 
 			JFileChooser loadChar = new JFileChooser();
-			loadChar.showSaveDialog(mainWindow);
+			loadChar.showOpenDialog(mainWindow);
 
 			try {
-				ObjectInputStream is = new ObjectInputStream(new FileInputStream(loadChar.getSelectedFile()));
-				
-				loadedCharacter = (RPGCharacter)is.readObject();
-				
+				ObjectInputStream is = new ObjectInputStream(
+						new FileInputStream(loadChar.getSelectedFile()));
+
+				loadedCharacter = (RPGCharacter) is.readObject();
+
 				new NewRPGCharacter().updateCharacter();
-				
+
 				is.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -457,8 +497,7 @@ public class Sheet implements FocusListener {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			
-			
+
 		}
 	}
 
@@ -475,38 +514,21 @@ public class Sheet implements FocusListener {
 		mainWindow.setVisible(true);
 
 	}
-	
 
+	@Override
+	public void focusGained(FocusEvent arg0) {
 
-@Override
-public void focusGained(FocusEvent arg0) {
+	}
 
-}
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		new NewRPGCharacter().updateRings();
 
-@Override
-public void focusLost(FocusEvent arg0) {
-	RPGCharacter tempRPGChar = new NewRPGCharacter().generateCharacter(); // necessary
-																			// to
-																			// update
-																			// the
-																			// ring
-																			// values
-	tempRPGChar.calcRings();
-	earthRingField.setText(String.valueOf(tempRPGChar.getEarthRing()));
-	waterRingField.setText(String.valueOf(tempRPGChar.getWaterRing()));
-	fireRingField.setText(String.valueOf(tempRPGChar.getFireRing()));
-	airRingField.setText(String.valueOf(tempRPGChar.getAirRing()));
-	voidRingField.setText(String.valueOf(tempRPGChar.getVoidRing()));
-
-	System.out.println(tempRPGChar.getEarthRing());
-
-}
+	}
 
 	public static void main(String[] args) {
 		Sheet gui = new Sheet();
 		gui.createNShowGUI();
 
-	
-
-}
+	}
 }
