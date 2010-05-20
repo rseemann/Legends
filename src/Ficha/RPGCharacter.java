@@ -5,41 +5,39 @@ import java.util.*;
 
 import Skills.Skill;
 
-public class RPGCharacter implements Serializable{
-	private String name;
-	private Family family;
+public class RPGCharacter implements Serializable {
+	private String name = "";
+	private String family = "";
 	private ArrayList<Skill> skills = new ArrayList<Skill>();
 	private int skillPoints;
-	private String clan;
+	private String clan = "";
 	private Map wounds = new HashMap();
-	private double glory;
-	private double honor;
-	private double status;
-	private double taint;
-	private int experiencePoints;
-	private String school;
-	
+	private double glory = 0;
+	private double honor = 0;
+	private double status = 0;
+	private double taint = 0;
+	private int experiencePoints = 0;
+	private String school = "";
 
 	// traits
-	private int stamina;
-	private int willpower;
-	private int stength;
-	private int perception;
-	private int agility;
-	private int intelligence;
-	private int reflexes;
-	private int awareness;
-	private int voidTrait; // can't create a variable named void
-
+	private int stamina= 0;
+	private int willpower= 0;
+	private int stength= 0;
+	private int perception= 0;
+	private int agility= 0;
+	private int intelligence= 0;
+	private int reflexes= 0;
+	private int awareness= 0;
+	
 	// rings
-	private int earthRing;
-	private int waterRing;
-	private int fireRing;
-	private int airRing;
-	private int voidRing;
-	private int ringSum;
+	private int earthRing = 0;
+	private int waterRing = 0;
+	private int fireRing = 0;
+	private int airRing = 0;
+	private int voidRing = 0;
+	private int ringSum = 0;
 
-	private int rank;
+	private int rank = 0;
 
 	public void calcRank() {
 		this.rank = (this.ringSum * 10) + (skillPoints);
@@ -57,31 +55,27 @@ public class RPGCharacter implements Serializable{
 		wounds.put("Down", earthRing * 14);
 		wounds.put("Out", earthRing * 19);
 	}
-	
-	public Map getWounds(){
+
+	public Map getWounds() {
 		return wounds;
-		
+
 	}
 
 	// constructor
 
-	/*public void RPGCharacter(String name, String clan, int stamina,
-			int willpower, int strength, int perception, int agility,
-			int intelligence, int reflexes, int awareness, int voidTrait) {
-		
-		this.setName(name);
-		this.setClan(clan);
-		this.setStamina(stamina);
-		this.setWillpower(willpower);
-		this.setStrength(strength);
-		this.setPerception(perception);
-		this.setAgility(agility);
-		this.setIntelligence(intelligence);
-		this.setReflexes(reflexes);
-		this.setAwareness(awareness);
-		this.setVoidTrait(voidTrait);
-				
-	}*/
+	/*
+	 * public void RPGCharacter(String name, String clan, int stamina, int
+	 * willpower, int strength, int perception, int agility, int intelligence,
+	 * int reflexes, int awareness, int voidTrait) {
+	 * 
+	 * this.setName(name); this.setClan(clan); this.setStamina(stamina);
+	 * this.setWillpower(willpower); this.setStrength(strength);
+	 * this.setPerception(perception); this.setAgility(agility);
+	 * this.setIntelligence(intelligence); this.setReflexes(reflexes);
+	 * this.setAwareness(awareness); this.setVoidTrait(voidTrait);
+	 * 
+	 * }
+	 */
 
 	// skills
 	public void addSkill(String name) {
@@ -89,7 +83,7 @@ public class RPGCharacter implements Serializable{
 	}
 
 	public int getSkillLocation(String skillName) { // finds the location of the
-													// desired skill in the list
+		// desired skill in the list
 		int i = 0;
 		while (skillName.compareToIgnoreCase(skills.get(i).getName()) != 0) {
 			i++;
@@ -149,7 +143,7 @@ public class RPGCharacter implements Serializable{
 		}
 
 		// void ring
-		voidRing = voidTrait;
+		
 	}
 
 	// getters e setters
@@ -206,11 +200,11 @@ public class RPGCharacter implements Serializable{
 		return name;
 	}
 
-	public void setFamily(Family family) {
+	public void setFamily(String family) {
 		this.family = family;
 	}
 
-	public Family getFamily() {
+	public String getFamily() {
 		return family;
 	}
 
@@ -278,18 +272,14 @@ public class RPGCharacter implements Serializable{
 		return awareness;
 	}
 
-	public void setVoidTrait(int voidTrait) {
-		this.voidTrait = voidTrait;
-	}
-
-	public int getVoidTrait() {
-		return voidTrait;
-	}
-
 	public void setClan(String clan) {
 		this.clan = clan;
 	}
-
+	
+	public void setVoidRing(int voidRing) {
+		this.voidRing = voidRing;
+	}
+	
 	public String getClan() {
 		return clan;
 	}

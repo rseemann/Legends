@@ -98,25 +98,25 @@ public class Sheet implements FocusListener {
 		GridBagConstraints ap = new GridBagConstraints();
 
 		activeCharacter = updater.generateCharacterFromSheet();
-		
+
 		JLabel woundsTitle = new JLabel("Wound lvl");
 		ap.insets = new Insets(10, 10, 5, 5);
 		ap.gridx = 0;
 		ap.gridy = 0;
 		rightPanel.add(woundsTitle,ap);
-		
+
 		JLabel woundsMaxPerLevel = new JLabel("Total");
 		ap.gridx = 1;
 		rightPanel.add(woundsMaxPerLevel,ap);
-		
+
 		JLabel currentDmg =  new JLabel ("Current Dmg");
 		ap.gridx=2;
 		rightPanel.add(currentDmg,ap);
-		
-		
-		
-		
-		
+
+
+
+
+
 		rightPanel.setBackground(Color.orange);
 
 		return rightPanel;
@@ -444,7 +444,7 @@ public class Sheet implements FocusListener {
 					.getText()));
 			tmpChar.setReflexes(Integer.parseInt(reflexesField.getText()));
 			tmpChar.setAwareness(Integer.parseInt(awarenessField.getText()));
-			tmpChar.setVoidTrait(Integer.parseInt(voidRingField.getText()));
+			tmpChar.setVoidRing(Integer.parseInt(voidRingField.getText()));
 			tmpChar.calcRings();
 			return tmpChar;
 
@@ -469,7 +469,7 @@ public class Sheet implements FocusListener {
 			awarenessField.setText(String.valueOf(activeCharacter
 					.getAwareness()));
 			voidRingField.setText(String
-					.valueOf(activeCharacter.getVoidTrait()));
+					.valueOf(activeCharacter.getVoidRing()));
 
 		}
 
