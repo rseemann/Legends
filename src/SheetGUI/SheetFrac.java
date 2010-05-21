@@ -62,17 +62,15 @@ public class SheetFrac{
 
 		public void actionPerformed(ActionEvent arg0) {
 
-			//RPGCharacter tmpCharToSave = new NewRPGCharacter().generateCharacterFromSheet();
-
 			JFileChooser saveChar = new JFileChooser();
+			
 			saveChar.showSaveDialog(mainWindow);
 
 			ObjectOutputStream os;
 
 			try {
-				os = new ObjectOutputStream(new FileOutputStream(saveChar
-						.getSelectedFile()));
-				//os.writeObject(tmpCharToSave);
+				os = new ObjectOutputStream(new FileOutputStream(saveChar.getSelectedFile()));
+				os.writeObject(rpgChar);
 				os.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -95,9 +93,7 @@ public class SheetFrac{
 						new FileInputStream(loadChar.getSelectedFile()));
 
 				rpgChar = (RPGCharacter) is.readObject();
-
-
-
+				
 				is.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -106,7 +102,9 @@ public class SheetFrac{
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-
+			
+			
+			
 		}
 	}
 	
@@ -127,18 +125,12 @@ public class SheetFrac{
 		rpgChar.setReflexes(insertedData.get("refl"));
 		rpgChar.setAwareness(insertedData.get("awar"));
 		rpgChar.setVoidRing(insertedData.get("void"));
-		
 		rpgChar.calcRings();
 		
-}
-	
-	public RPGCharacter getRpgChar(){
-		return rpgChar;
+		rpgChar.getWater = rpgChar.getWaterRing();
+		System.out.println(rpgChar.getWater);
+		
 	}
-	
-	
-	
-	
 	
 	public void createNShowGUI() {
 

@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import Ficha.RPGCharacter;
 import SheetGUI.Sheet.NewRPGCharacter;
 
-public class TopPanelRings implements FocusListener {
+public class TopPanelRings implements FocusListener{
 	private JTextField earthRingField;
 	private JTextField staminaField;
 	private JTextField willpowerField;
@@ -278,9 +278,7 @@ public class TopPanelRings implements FocusListener {
 	@Override
 	public void focusLost(FocusEvent arg0) {
 		new SheetFrac().updateTraitsDataFromSheet(getInsertedTraitsData());
-		rpgChar = new SheetFrac().getRpgChar();
-		System.out.println(rpgChar.getEarthRing());
-		
+		updateRings();		
 	}
 
 	public Map<String, Integer> getInsertedTraitsData() {
@@ -298,10 +296,36 @@ public class TopPanelRings implements FocusListener {
 
 		return insertedData;
 	}
+	
+	public RPGCharacter generateCharacterFromSheet() {
+		RPGCharacter tmpChar = new RPGCharacter();
+		
+		tmpChar.setStamina(Integer.parseInt(staminaField.getText()));
+		tmpChar.setWillpower(Integer.parseInt(willpowerField.getText()));
+		tmpChar.setStrength(Integer.parseInt(strengthField.getText()));
+		tmpChar.setPerception(Integer.parseInt(perceptionField.getText()));
+		tmpChar.setAgility(Integer.parseInt(agilityField.getText()));
+		tmpChar.setIntelligence(Integer.parseInt(intelligenceField
+				.getText()));
+		tmpChar.setReflexes(Integer.parseInt(reflexesField.getText()));
+		tmpChar.setAwareness(Integer.parseInt(awarenessField.getText()));
+		tmpChar.setVoidRing(Integer.parseInt(voidRingField.getText()));
+		tmpChar.calcRings();
+		return tmpChar;
+	}
+	
+	public void updateRings(){
+		RPGCharacter tmpChar = generateCharacterFromSheet();
+		earthRingField.setText(tmpChar.getEarthRing()+"");
+		airRingField.setText(tmpChar.getAirRing()+"");
+		waterRingField.setText(tmpChar.getWaterRing()+"");
+		fireRingField.setText(tmpChar.getFireRing()+"");
+		voidRingField.setText(tmpChar.getVoidRing()+"");
+	}
 
 	// getters e setters
 
-	public void setEarthRingField(String earthRingField) {
+	/*public void setEarthRingField(String earthRingField) {
 		this.earthRingField.setText(earthRingField);
 	}
 

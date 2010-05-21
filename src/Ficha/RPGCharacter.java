@@ -18,17 +18,16 @@ public class RPGCharacter implements Serializable {
 	private double taint = 0;
 	private int experiencePoints = 0;
 	private String school = "";
-
 	// traits
-	private int stamina= 0;
-	private int willpower= 0;
-	private int stength= 0;
-	private int perception= 0;
-	private int agility= 0;
-	private int intelligence= 0;
-	private int reflexes= 0;
-	private int awareness= 0;
-	
+	private int stamina = 0;
+	private int willpower = 0;
+	private int stength = 0;
+	private int perception = 0;
+	private int agility = 0;
+	private int intelligence = 0;
+	private int reflexes = 0;
+	private int awareness = 0;
+
 	// rings
 	private int earthRing = 0;
 	private int waterRing = 0;
@@ -143,7 +142,7 @@ public class RPGCharacter implements Serializable {
 		}
 
 		// void ring
-		
+
 	}
 
 	// getters e setters
@@ -275,11 +274,11 @@ public class RPGCharacter implements Serializable {
 	public void setClan(String clan) {
 		this.clan = clan;
 	}
-	
+
 	public void setVoidRing(int voidRing) {
 		this.voidRing = voidRing;
 	}
-	
+
 	public String getClan() {
 		return clan;
 	}
