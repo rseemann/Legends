@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,19 +25,21 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import Ficha.RPGCharacter;
-import SheetGUI.Sheet.NewRPGCharacter;
 
-public class SheetFrac{
+public class SheetFrac implements Serializable{
 	private JFrame mainWindow;
 	private JPanel topPanel;
 	private JPanel rightPanel;
 	private RPGCharacter rpgChar = new RPGCharacter();
 	private Map<String, Integer> traitsMap = new HashMap<String, Integer>(); 
+	private static SheetFrac sheet;
 	
 	public void addMainWindowItems(Container pane) {
-
+		
+		
 		// ---menu----
-
+		JMenuItem newMenuItem = new JMenuItem("New");
+		newMenuItem.addActionListener(new NewMenuItemListener());
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem loadMenuItem = new JMenuItem("Load");
@@ -44,18 +47,32 @@ public class SheetFrac{
 		JMenuItem saveMenuItem = new JMenuItem("Save");
 		saveMenuItem.addActionListener(new SaveMenuItemListener());
 
+		fileMenu.add(newMenuItem);
 		fileMenu.add(loadMenuItem);
 		fileMenu.add(saveMenuItem);
 		menuBar.add(fileMenu);
 		mainWindow.setJMenuBar(menuBar);
 
 		// -----top panel-----
+		topPanel = new JPanel(new BorderLayout());
+		topPanel.setBackground(Color.lightGray);		
 		
-		topPanel = new TopPanel().CreateTopPanel(rpgChar);
+		TopPanelRings ringsPanel = new TopPanelRings();
+		rpgChar.addListener(ringsPanel);
+		TopPanelInfo infoPanel = new TopPanelInfo();
+		rpgChar.addListener(infoPanel);
+		
+		JPanel topPanelRings = ringsPanel.CreateTopPanelRing(sheet);
+		JPanel topPanelInfo = infoPanel.CreateTopPanelInfo(sheet);
+		
+		topPanel.add(BorderLayout.NORTH, topPanelInfo);
+		topPanel.add(BorderLayout.CENTER, topPanelRings);
 		
 		pane.add(BorderLayout.NORTH, topPanel);
-		
-
+	}
+	
+	public void updateRings() {
+		rpgChar.calcRings();
 	}
 	
 	class SaveMenuItemListener implements ActionListener {
@@ -72,6 +89,7 @@ public class SheetFrac{
 				os = new ObjectOutputStream(new FileOutputStream(saveChar.getSelectedFile()));
 				os.writeObject(rpgChar);
 				os.close();
+
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -87,12 +105,14 @@ public class SheetFrac{
 
 			JFileChooser loadChar = new JFileChooser();
 			loadChar.showOpenDialog(mainWindow);
-
+			
 			try {
 				ObjectInputStream is = new ObjectInputStream(
 						new FileInputStream(loadChar.getSelectedFile()));
 
 				rpgChar = (RPGCharacter) is.readObject();
+				//System.out.println(rpgChar.getEarthRing());
+				//System.out.println(rpgChar.getName());
 				
 				is.close();
 			} catch (FileNotFoundException e) {
@@ -106,6 +126,16 @@ public class SheetFrac{
 			
 			
 		}
+	}
+	
+	class NewMenuItemListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			//if (rpgChar != new RPGCharacter()){
+				rpgChar = new RPGCharacter();
+		}
+		
 	}
 	
 	
@@ -127,9 +157,10 @@ public class SheetFrac{
 		rpgChar.setVoidRing(insertedData.get("void"));
 		rpgChar.calcRings();
 		
-		rpgChar.getWater = rpgChar.getWaterRing();
-		System.out.println(rpgChar.getWater);
-		
+	}
+	
+	public RPGCharacter getRpgChar() {
+		return rpgChar;
 	}
 	
 	public void createNShowGUI() {
@@ -146,9 +177,10 @@ public class SheetFrac{
 
 	}
 	public static void main(String[] args) {
-		SheetFrac gui = new SheetFrac();
-		gui.createNShowGUI();
-
+		sheet = new SheetFrac();
+		sheet.createNShowGUI();
+		
+		
 	}
 
 }

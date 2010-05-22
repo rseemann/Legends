@@ -1,11 +1,15 @@
 package Ficha;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import Interfaces.IListenable;
+import Interfaces.IListener;
 import Skills.Skill;
 
-public class RPGCharacter implements Serializable {
+public class RPGCharacter implements IListenable, Serializable{
 	private String name = "";
 	private String family = "";
 	private ArrayList<Skill> skills = new ArrayList<Skill>();
@@ -35,8 +39,8 @@ public class RPGCharacter implements Serializable {
 	private int airRing = 0;
 	private int voidRing = 0;
 	private int ringSum = 0;
-
 	private int rank = 0;
+	private ArrayList<IListener> listenersList = new ArrayList<IListener>();
 
 	public void calcRank() {
 		this.rank = (this.ringSum * 10) + (skillPoints);
@@ -109,6 +113,7 @@ public class RPGCharacter implements Serializable {
 	// ring related methods
 	public void calcRingSum() {
 		ringSum = earthRing + waterRing + fireRing + airRing + voidRing;
+		notifyListener();
 	}
 
 	public void calcRings() { // calculates the value of the rings
@@ -141,6 +146,7 @@ public class RPGCharacter implements Serializable {
 			airRing = awareness;
 		}
 
+		notifyListener();
 		// void ring
 
 	}
@@ -149,6 +155,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setHonor(double honor) {
 		this.honor = honor;
+		notifyListener();
 	}
 
 	public double getHonor() {
@@ -157,6 +164,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setGlory(double glory) {
 		this.glory = glory;
+		notifyListener();
 	}
 
 	public double getGlory() {
@@ -165,6 +173,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setStatus(double status) {
 		this.status = status;
+		notifyListener();
 	}
 
 	public double getStatus() {
@@ -173,6 +182,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setTaint(double taint) {
 		this.taint = taint;
+		notifyListener();
 	}
 
 	public double getTaint() {
@@ -181,6 +191,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setExperiencePoints(int experiencePoints) {
 		this.experiencePoints = experiencePoints;
+		notifyListener();
 	}
 
 	public int getExperiencePoints() {
@@ -193,6 +204,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+		notifyListener();
 	}
 
 	public String getName() {
@@ -201,6 +213,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setFamily(String family) {
 		this.family = family;
+		notifyListener();
 	}
 
 	public String getFamily() {
@@ -209,6 +222,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setStamina(int stamina) {
 		this.stamina = stamina;
+		notifyListener();
 	}
 
 	public int getStamina() {
@@ -217,6 +231,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setWillpower(int willpower) {
 		this.willpower = willpower;
+		notifyListener();
 	}
 
 	public int getWillpower() {
@@ -225,6 +240,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setStrength(int stength) {
 		this.stength = stength;
+		notifyListener();
 	}
 
 	public int getStength() {
@@ -233,6 +249,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setPerception(int perception) {
 		this.perception = perception;
+		notifyListener();
 	}
 
 	public int getPerception() {
@@ -241,6 +258,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setIntelligence(int intelligence) {
 		this.intelligence = intelligence;
+		notifyListener();
 	}
 
 	public int getIntelligence() {
@@ -249,6 +267,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setAgility(int agility) {
 		this.agility = agility;
+		notifyListener();
 	}
 
 	public int getAgility() {
@@ -257,6 +276,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setReflexes(int reflexes) {
 		this.reflexes = reflexes;
+		notifyListener();
 	}
 
 	public int getReflexes() {
@@ -265,6 +285,7 @@ public class RPGCharacter implements Serializable {
 
 	public void setAwareness(int awareness) {
 		this.awareness = awareness;
+		notifyListener();
 	}
 
 	public int getAwareness() {
@@ -273,10 +294,12 @@ public class RPGCharacter implements Serializable {
 
 	public void setClan(String clan) {
 		this.clan = clan;
+		notifyListener();
 	}
 
 	public void setVoidRing(int voidRing) {
 		this.voidRing = voidRing;
+		notifyListener();
 	}
 
 	public String getClan() {
@@ -309,10 +332,25 @@ public class RPGCharacter implements Serializable {
 
 	public void setSchool(String school) {
 		this.school = school;
+		notifyListener();
 	}
 
 	public String getSchool() {
 		return school;
+	}
+
+	@Override
+	public void addListener(IListener listener) {
+		listenersList.add(listener);
+	}
+
+	@Override
+	public void notifyListener() {
+		//System.out.println("notifing listeners");
+		for (IListener listener : listenersList) {
+			listener.dataUpdated();
+		}
+
 	}
 
 }

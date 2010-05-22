@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,9 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Ficha.RPGCharacter;
-import SheetGUI.Sheet.NewRPGCharacter;
+import Interfaces.IListener;
 
-public class TopPanelRings implements FocusListener{
+public class TopPanelRings implements FocusListener, IListener, Serializable{
 	private JTextField earthRingField;
 	private JTextField staminaField;
 	private JTextField willpowerField;
@@ -33,9 +34,11 @@ public class TopPanelRings implements FocusListener{
 	private JTextField voidRingField;
 	private JTextField pointsSpentField;
 	private RPGCharacter rpgChar;
+	SheetFrac sheet;
 
-	public JPanel CreateTopPanelRing(RPGCharacter rpgChar) {
-
+	public JPanel CreateTopPanelRing(SheetFrac rpgSheet) {
+		sheet = rpgSheet;
+		rpgChar  = rpgSheet.getRpgChar();
 		JPanel topPanelRings = new JPanel(new GridBagLayout());
 		GridBagConstraints tpr = new GridBagConstraints();
 		topPanelRings.setBackground(Color.lightGray);
@@ -277,8 +280,9 @@ public class TopPanelRings implements FocusListener{
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		new SheetFrac().updateTraitsDataFromSheet(getInsertedTraitsData());
-		updateRings();		
+		System.out.println("Updating... ");
+		rpgChar  = sheet.getRpgChar(); //get data from the char and put in rpgChar
+		sheet.updateTraitsDataFromSheet(getInsertedTraitsData()); //put the data from fields into the char
 	}
 
 	public Map<String, Integer> getInsertedTraitsData() {
@@ -297,32 +301,39 @@ public class TopPanelRings implements FocusListener{
 		return insertedData;
 	}
 	
-	public RPGCharacter generateCharacterFromSheet() {
-		RPGCharacter tmpChar = new RPGCharacter();
-		
-		tmpChar.setStamina(Integer.parseInt(staminaField.getText()));
-		tmpChar.setWillpower(Integer.parseInt(willpowerField.getText()));
-		tmpChar.setStrength(Integer.parseInt(strengthField.getText()));
-		tmpChar.setPerception(Integer.parseInt(perceptionField.getText()));
-		tmpChar.setAgility(Integer.parseInt(agilityField.getText()));
-		tmpChar.setIntelligence(Integer.parseInt(intelligenceField
-				.getText()));
-		tmpChar.setReflexes(Integer.parseInt(reflexesField.getText()));
-		tmpChar.setAwareness(Integer.parseInt(awarenessField.getText()));
-		tmpChar.setVoidRing(Integer.parseInt(voidRingField.getText()));
-		tmpChar.calcRings();
-		return tmpChar;
+	public void updateRingFields(){
+		earthRingField.setText(rpgChar.getEarthRing()+"");
+		airRingField.setText(rpgChar.getAirRing()+"");
+		waterRingField.setText(rpgChar.getWaterRing()+"");
+		fireRingField.setText(rpgChar.getFireRing()+"");
+		voidRingField.setText(rpgChar.getVoidRing()+"");
 	}
 	
-	public void updateRings(){
-		RPGCharacter tmpChar = generateCharacterFromSheet();
-		earthRingField.setText(tmpChar.getEarthRing()+"");
-		airRingField.setText(tmpChar.getAirRing()+"");
-		waterRingField.setText(tmpChar.getWaterRing()+"");
-		fireRingField.setText(tmpChar.getFireRing()+"");
-		voidRingField.setText(tmpChar.getVoidRing()+"");
+
+
+	@Override
+	public void dataUpdated() {
+		System.out.println("updating the sheet");
+		updateRingFields();
+		
+		
 	}
 
+	
+	/*public void updateSheet() {
+	
+	rpgChar.setStamina(Integer.parseInt(staminaField.getText()));
+	rpgChar.setWillpower(Integer.parseInt(willpowerField.getText()));
+	rpgChar.setStrength(Integer.parseInt(strengthField.getText()));
+	rpgChar.setPerception(Integer.parseInt(perceptionField.getText()));
+	rpgChar.setAgility(Integer.parseInt(agilityField.getText()));
+	rpgChar.setIntelligence(Integer.parseInt(intelligenceField.getText()));
+	rpgChar.setReflexes(Integer.parseInt(reflexesField.getText()));
+	rpgChar.setAwareness(Integer.parseInt(awarenessField.getText()));
+	rpgChar.setVoidRing(Integer.parseInt(voidRingField.getText()));
+	}*/
+	
+	
 	// getters e setters
 
 	/*public void setEarthRingField(String earthRingField) {

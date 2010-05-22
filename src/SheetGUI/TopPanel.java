@@ -21,17 +21,17 @@ public class TopPanel{
 	
 	private JPanel topPanel;
 		
-	public JPanel CreateTopPanel(RPGCharacter rpgChar) {
+	public JPanel CreateTopPanel(SheetFrac rpgSheet) {
 		topPanel = new JPanel(new BorderLayout());
 		topPanel.setBackground(Color.lightGray);
 
 		// -------Character Info Panel--------
 				
-		JPanel topPanelInfo = new TopPanelInfo().CreateTopPanelInfo(rpgChar);
+		JPanel topPanelInfo = new TopPanelInfo().CreateTopPanelInfo(rpgSheet);
 		
 		// ----Character Traits and Rings Panel----
 		
-		JPanel topPanelRings = new TopPanelRings().CreateTopPanelRing(rpgChar);
+		JPanel topPanelRings = new TopPanelRings().CreateTopPanelRing(rpgSheet);
 
 		// addings panels to topPanel
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);

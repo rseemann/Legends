@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,15 +15,21 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Ficha.RPGCharacter;
+import Interfaces.IListener;
 
-public class TopPanelInfo implements FocusListener{
+public class TopPanelInfo implements FocusListener, IListener, Serializable{
 	private JTextField clanField;
 	private JTextField nameField;
 	private JTextField schoolField;
 	private JTextField rankField;
 	private JTextField insightField;
+	private RPGCharacter rpgChar;
+	private SheetFrac sheet;
 
-	public JPanel CreateTopPanelInfo(RPGCharacter rpgChar){
+	public JPanel CreateTopPanelInfo(SheetFrac rpgSheet){
+		rpgChar  = rpgSheet.getRpgChar();
+		sheet = rpgSheet;
+		
 		JPanel topPanelInfo = new JPanel(new GridBagLayout());
 		GridBagConstraints tpi = new GridBagConstraints();
 		topPanelInfo.setBackground(Color.lightGray);
@@ -31,19 +38,22 @@ public class TopPanelInfo implements FocusListener{
 
 		JLabel nameLabel = new JLabel("Name: ");
 		nameField = new JTextField(rpgChar.getName(), 16);
+		nameField.addFocusListener(this);
 
 		JLabel clanLabel = new JLabel("Clan: ");
 		clanField = new JTextField(rpgChar.getClan(), 8);
-
+		clanField.addFocusListener(this);
+		
 		JLabel schoolLabel = new JLabel("School: ");
 		schoolField = new JTextField(rpgChar.getSchool(), 10);
-
+		schoolField.addFocusListener(this);
+		
 		JLabel rankLabel = new JLabel("Rank: ");
 		rankField = new JTextField(String.valueOf(rpgChar.getRank()), 1);
-
+		
 		JLabel insightLabel = new JLabel("Insight Rank: ");
 		insightField = new JTextField(3);
-
+		
 		tpi.ipadx = 10;
 		tpi.gridx = 0;
 		topPanelInfo.add(nameLabel, tpi);
@@ -78,6 +88,7 @@ public class TopPanelInfo implements FocusListener{
 		return topPanelInfo;
 	}
 	
+	
 	public Map<String, String> getInsertedInfoData(){
 		Map <String, String> insertedData = new HashMap<String, String>();
 		insertedData.put("name", nameField.getText());
@@ -88,11 +99,16 @@ public class TopPanelInfo implements FocusListener{
 	}
 	
 	public void focusLost(FocusEvent arg0) {
-		new SheetFrac().updateInfoDataFromSheet(getInsertedInfoData());
+		sheet.updateInfoDataFromSheet(getInsertedInfoData());
 	}
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void dataUpdated() {
 		// TODO Auto-generated method stub
 		
 	}

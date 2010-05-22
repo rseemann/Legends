@@ -1,6 +1,6 @@
-package SheetGUI;
+package Interfaces;
 
-public interface IListenable {
+public interface IListenable{
 	public void addListener(IListener listener);
 	public void notifyListener();
 }
