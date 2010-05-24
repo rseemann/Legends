@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +20,7 @@ import javax.swing.JTextField;
 import Ficha.RPGCharacter;
 import Interfaces.IListener;
 
-public class TopPanelRings implements FocusListener, IListener, Serializable{
+public class TopPanelRings implements IListener, Serializable, KeyListener {
 	private JTextField earthRingField;
 	private JTextField staminaField;
 	private JTextField willpowerField;
@@ -34,12 +36,13 @@ public class TopPanelRings implements FocusListener, IListener, Serializable{
 	private JTextField voidRingField;
 	private JTextField pointsSpentField;
 	private RPGCharacter rpgChar;
-	SheetFrac sheet;
+	private JPanel topPanelRings;
+	private SheetFrac sheet;
 
-	public JPanel CreateTopPanelRing(SheetFrac rpgSheet) {
+	public JPanel createTopPanelRing(SheetFrac rpgSheet) {
 		sheet = rpgSheet;
-		rpgChar  = rpgSheet.getRpgChar();
-		JPanel topPanelRings = new JPanel(new GridBagLayout());
+		rpgChar = rpgSheet.getRpgChar();
+		topPanelRings = new JPanel(new GridBagLayout());
 		GridBagConstraints tpr = new GridBagConstraints();
 		topPanelRings.setBackground(Color.lightGray);
 
@@ -70,12 +73,12 @@ public class TopPanelRings implements FocusListener, IListener, Serializable{
 		earthRingField.setEditable(false);
 		JLabel staminaLabel = new JLabel("Stamina: ");
 		staminaField = new JTextField(String.valueOf(rpgChar.getStamina()), 3);
-		staminaField.addFocusListener(this);
+		staminaField.addKeyListener(this);
 
 		JLabel willpowerLabel = new JLabel("Willpower: ");
 		willpowerField = new JTextField(String.valueOf(rpgChar.getWillpower()),
 				3);
-		willpowerField.addFocusListener(this);
+		willpowerField.addKeyListener(this);
 		tpr.gridwidth = 1;
 
 		tpr.gridy = 1;
@@ -115,12 +118,12 @@ public class TopPanelRings implements FocusListener, IListener, Serializable{
 				3);
 		waterRingField.setEditable(false);
 		JLabel strengthLabel = new JLabel("Strength: ");
-		strengthField = new JTextField(String.valueOf(rpgChar.getStength()), 3);
-		strengthField.addFocusListener(this);
+		strengthField = new JTextField(String.valueOf(rpgChar.getStrength()), 3);
+		strengthField.addKeyListener(this);
 		JLabel perceptionLabel = new JLabel("Perception: ");
 		perceptionField = new JTextField(String
 				.valueOf(rpgChar.getPerception()), 3);
-		perceptionField.addFocusListener(this);
+		perceptionField.addKeyListener(this);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -161,11 +164,11 @@ public class TopPanelRings implements FocusListener, IListener, Serializable{
 		fireRingField.setEditable(false);
 		JLabel agilityLabel = new JLabel("Agility: ");
 		agilityField = new JTextField(String.valueOf(rpgChar.getAgility()), 3);
-		agilityField.addFocusListener(this);
+		agilityField.addKeyListener(this);
 		JLabel intelligenceLabel = new JLabel("Intelligence: ");
 		intelligenceField = new JTextField(String.valueOf(rpgChar
 				.getIntelligence()), 3);
-		intelligenceField.addFocusListener(this);
+		intelligenceField.addKeyListener(this);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -206,11 +209,11 @@ public class TopPanelRings implements FocusListener, IListener, Serializable{
 		airRingField.setEditable(false);
 		JLabel reflexesLabel = new JLabel("Reflexes: ");
 		reflexesField = new JTextField(String.valueOf(rpgChar.getReflexes()), 3);
-		reflexesField.addFocusListener(this);
+		reflexesField.addKeyListener(this);
 		JLabel awarenessLabel = new JLabel("Awareness: ");
 		awarenessField = new JTextField(String.valueOf(rpgChar.getAwareness()),
 				3);
-		awarenessField.addFocusListener(this);
+		awarenessField.addKeyListener(this);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;
@@ -250,7 +253,7 @@ public class TopPanelRings implements FocusListener, IListener, Serializable{
 
 		voidRingField = new JTextField(String.valueOf(rpgChar.getVoidRing()), 3);
 		JLabel pointsSpentLabel = new JLabel("Points Spent: ");
-		voidRingField.addFocusListener(this);
+		voidRingField.addKeyListener(this);
 		pointsSpentField = new JTextField("0", 3);
 
 		tpr.gridwidth = 1;
@@ -273,70 +276,69 @@ public class TopPanelRings implements FocusListener, IListener, Serializable{
 		return topPanelRings;
 	}
 
-	@Override
-	public void focusGained(FocusEvent arg0) {
-
+	public void updateRingFields() {
+		earthRingField.setText(rpgChar.getEarthRing() + "");
+		airRingField.setText(rpgChar.getAirRing() + "");
+		waterRingField.setText(rpgChar.getWaterRing() + "");
+		fireRingField.setText(rpgChar.getFireRing() + "");
+		voidRingField.setText(rpgChar.getVoidRing() + "");
 	}
 
-	@Override
-	public void focusLost(FocusEvent arg0) {
-		System.out.println("Updating... ");
-		rpgChar  = sheet.getRpgChar(); //get data from the char and put in rpgChar
-		sheet.updateTraitsDataFromSheet(getInsertedTraitsData()); //put the data from fields into the char
+	public void updateCharacterTraitsAndRings() {
+		rpgChar.setStamina(Integer.parseInt(staminaField.getText()));
+		rpgChar.setWillpower(Integer.parseInt(willpowerField.getText()));
+		rpgChar.setStrength(Integer.parseInt(strengthField.getText()));
+		rpgChar.setPerception(Integer.parseInt(perceptionField.getText()));
+		rpgChar.setAgility(Integer.parseInt(agilityField.getText()));
+		rpgChar.setIntelligence(Integer.parseInt(intelligenceField.getText()));
+		rpgChar.setReflexes(Integer.parseInt(reflexesField.getText()));
+		rpgChar.setAwareness(Integer.parseInt(awarenessField.getText()));
+		rpgChar.setVoidRing(Integer.parseInt(voidRingField.getText()));
+		rpgChar.calcRings();
+		updateRingFields();
 	}
 
-	public Map<String, Integer> getInsertedTraitsData() {
-		Map<String, Integer> insertedData = new HashMap<String, Integer>();
-
-		insertedData.put("stam", Integer.parseInt(staminaField.getText()));
-		insertedData.put("will", Integer.parseInt(willpowerField.getText()));
-		insertedData.put("stre", Integer.parseInt(strengthField.getText()));
-		insertedData.put("perc", Integer.parseInt(perceptionField.getText()));
-		insertedData.put("agil", Integer.parseInt(agilityField.getText()));
-		insertedData.put("inte", Integer.parseInt(intelligenceField.getText()));
-		insertedData.put("refl", Integer.parseInt(reflexesField.getText()));
-		insertedData.put("awar", Integer.parseInt(awarenessField.getText()));
-		insertedData.put("void", Integer.parseInt(voidRingField.getText()));
-
-		return insertedData;
+	public void updateTraitsFields() {
+		staminaField.setText(String.valueOf(rpgChar.getStamina()));
+		willpowerField.setText(String.valueOf(rpgChar.getWillpower()));
+		strengthField.setText(String.valueOf(rpgChar.getStrength()));
+		perceptionField.setText(String.valueOf(rpgChar.getPerception()));
+		agilityField.setText(String.valueOf(rpgChar.getAgility()));
+		intelligenceField.setText(String.valueOf(rpgChar.getIntelligence()));
+		reflexesField.setText(String.valueOf(rpgChar.getReflexes()));
+		awarenessField.setText(String.valueOf(rpgChar.getAwareness()));
+		voidRingField.setText(String.valueOf(rpgChar.getVoidRing()));
 	}
-	
-	public void updateRingFields(){
-		earthRingField.setText(rpgChar.getEarthRing()+"");
-		airRingField.setText(rpgChar.getAirRing()+"");
-		waterRingField.setText(rpgChar.getWaterRing()+"");
-		fireRingField.setText(rpgChar.getFireRing()+"");
-		voidRingField.setText(rpgChar.getVoidRing()+"");
-	}
-	
-
 
 	@Override
 	public void dataUpdated() {
-		System.out.println("updating the sheet");
 		updateRingFields();
-		
-		
 	}
 
-	
-	/*public void updateSheet() {
-	
-	rpgChar.setStamina(Integer.parseInt(staminaField.getText()));
-	rpgChar.setWillpower(Integer.parseInt(willpowerField.getText()));
-	rpgChar.setStrength(Integer.parseInt(strengthField.getText()));
-	rpgChar.setPerception(Integer.parseInt(perceptionField.getText()));
-	rpgChar.setAgility(Integer.parseInt(agilityField.getText()));
-	rpgChar.setIntelligence(Integer.parseInt(intelligenceField.getText()));
-	rpgChar.setReflexes(Integer.parseInt(reflexesField.getText()));
-	rpgChar.setAwareness(Integer.parseInt(awarenessField.getText()));
-	rpgChar.setVoidRing(Integer.parseInt(voidRingField.getText()));
-	}*/
-	
-	
-	// getters e setters
+	@Override
+	public void loadNewCharacter() {
+		updateTraitsFields();
+	}
 
-	/*public void setEarthRingField(String earthRingField) {
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		updateCharacterTraitsAndRings();
+
+	}
+
+	public void setEarthRingField(String earthRingField) {
 		this.earthRingField.setText(earthRingField);
 	}
 
@@ -356,59 +358,119 @@ public class TopPanelRings implements FocusListener, IListener, Serializable{
 		this.voidRingField.setText(voidRingField);
 	}
 
+	public void setStaminaField(String staminaField) {
+		this.staminaField.setText(staminaField);
+	}
+
+	public void setWillpowerField(String willpowerField) {
+		this.willpowerField.setText(willpowerField);
+	}
+
+	public String getStrengthField() {
+		return strengthField.getText();
+	}
+
+	public void setStrengthField(String strengthField) {
+		this.strengthField.setText(strengthField);
+	}
+
+	public String getPerceptionField() {
+		return perceptionField.getText();
+	}
+
+	public void setPerceptionField(String perceptionField) {
+		this.perceptionField.setText(perceptionField);
+	}
+
+	public String getFireRingField() {
+		return fireRingField.getText();
+	}
+
+	public String getAgilityField() {
+		return agilityField.getText();
+	}
+
+	public void setAgilityField(String agilityField) {
+		this.agilityField.setText(agilityField);
+	}
+
+	public String getIntelligenceField() {
+		return intelligenceField.getText();
+	}
+
+	public void setIntelligenceField(String intelligenceField) {
+		this.intelligenceField.setText(intelligenceField);
+	}
+
+	public String getAirRingField() {
+		return airRingField.getText();
+	}
+
+	public String getReflexesField() {
+		return reflexesField.getText();
+	}
+
+	public void setReflexesField(String reflexesField) {
+		this.reflexesField.setText(reflexesField);
+	}
+
+	public String getAwarenessField() {
+		return awarenessField.getText();
+	}
+
+	public void setAwarenessField(String awarenessField) {
+		this.awarenessField.setText(awarenessField);
+	}
+
+	public String getVoidRingField() {
+		return voidRingField.getText();
+	}
+
+	public String getPointsSpentField() {
+		return pointsSpentField.getText();
+	}
+
+	public void setPointsSpentField(String pointsSpentField) {
+		this.pointsSpentField.setText(pointsSpentField);
+	}
+
 	/*
-	 * public String getEarthRingField() { return earthRingField.getText(); }
+	 * public void updateSheet() {
 	 * 
-	 * public String getStaminaField() { return staminaField.getText(); }
+	 * rpgChar.setStamina(Integer.parseInt(staminaField.getText()));
+	 * rpgChar.setWillpower(Integer.parseInt(willpowerField.getText()));
+	 * rpgChar.setStrength(Integer.parseInt(strengthField.getText()));
+	 * rpgChar.setPerception(Integer.parseInt(perceptionField.getText()));
+	 * rpgChar.setAgility(Integer.parseInt(agilityField.getText()));
+	 * rpgChar.setIntelligence(Integer.parseInt(intelligenceField.getText()));
+	 * rpgChar.setReflexes(Integer.parseInt(reflexesField.getText()));
+	 * rpgChar.setAwareness(Integer.parseInt(awarenessField.getText()));
+	 * rpgChar.setVoidRing(Integer.parseInt(voidRingField.getText())); }
 	 * 
-	 * public void setStaminaField(String staminaField) {
-	 * this.staminaField.setText(staminaField); }
+	 * public Color getRandomColor(){ int red = (int) (Math.random()*225); int
+	 * blue = (int) (Math.random()*225); int green = (int) (Math.random()*225);
 	 * 
-	 * public String getWillpowerField() { return willpowerField.getText(); }
+	 * return new Color(red, green, blue); }
 	 * 
-	 * public void setWillpowerField(String willpowerField) {
-	 * this.willpowerField.setText(willpowerField); }
+	 * public Map<String, Integer> getInsertedTraitsData() { Map<String,
+	 * Integer> insertedData = new HashMap<String, Integer>();
 	 * 
-	 * public String getStrengthField() { return strengthField.getText(); }
+	 * insertedData.put("stam", Integer.parseInt(staminaField.getText()));
+	 * insertedData.put("will", Integer.parseInt(willpowerField.getText()));
+	 * insertedData.put("stre", Integer.parseInt(strengthField.getText()));
+	 * insertedData.put("perc", Integer.parseInt(perceptionField.getText()));
+	 * insertedData.put("agil", Integer.parseInt(agilityField.getText()));
+	 * insertedData.put("inte", Integer.parseInt(intelligenceField.getText()));
+	 * insertedData.put("refl", Integer.parseInt(reflexesField.getText()));
+	 * insertedData.put("awar", Integer.parseInt(awarenessField.getText()));
+	 * insertedData.put("void", Integer.parseInt(voidRingField.getText()));
 	 * 
-	 * public void setStrengthField(String strengthField) {
-	 * this.strengthField.setText(strengthField); }
-	 * 
-	 * public String getPerceptionField() { return perceptionField.getText(); }
-	 * 
-	 * public void setPerceptionField(String perceptionField) {
-	 * this.perceptionField.setText(perceptionField); }
-	 * 
-	 * public String getFireRingField() { return fireRingField.getText(); }
-	 * 
-	 * public String getAgilityField() { return agilityField.getText(); }
-	 * 
-	 * public void setAgilityField(String agilityField) {
-	 * this.agilityField.setText(agilityField); }
-	 * 
-	 * public String getIntelligenceField() { return
-	 * intelligenceField.getText(); }
-	 * 
-	 * public void setIntelligenceField(String intelligenceField) {
-	 * this.intelligenceField.setText(intelligenceField); }
-	 * 
-	 * public String getAirRingField() { return airRingField.getText(); }
-	 * 
-	 * public String getReflexesField() { return reflexesField.getText(); }
-	 * 
-	 * public void setReflexesField(String reflexesField) {
-	 * this.reflexesField.setText(reflexesField); }
-	 * 
-	 * public String getAwarenessField() { return awarenessField.getText(); }
-	 * 
-	 * public void setAwarenessField(String awarenessField) {
-	 * this.awarenessField.setText(awarenessField); }
-	 * 
-	 * public String getVoidRingField() { return voidRingField.getText(); }
-	 * public String getPointsSpentField() { return pointsSpentField.getText();
-	 * }
-	 * 
-	 * public void setPointsSpentField(String pointsSpentField) {
-	 * this.pointsSpentField.setText(pointsSpentField); }
+	 * return insertedData; }
+	 */
+
+	// getters e setters
+
+	/*
+
 	 */
 }

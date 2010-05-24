@@ -3,13 +3,14 @@ package Ficha;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Interfaces.IListenable;
 import Interfaces.IListener;
 import Skills.Skill;
 
-public class RPGCharacter implements IListenable, Serializable{
+public class RPGCharacter implements IListenable, Serializable {
 	private String name = "";
 	private String family = "";
 	private ArrayList<Skill> skills = new ArrayList<Skill>();
@@ -40,7 +41,7 @@ public class RPGCharacter implements IListenable, Serializable{
 	private int voidRing = 0;
 	private int ringSum = 0;
 	private int rank = 0;
-	private ArrayList<IListener> listenersList = new ArrayList<IListener>();
+	private transient List<IListener> listenersList;
 
 	public void calcRank() {
 		this.rank = (this.ringSum * 10) + (skillPoints);
@@ -243,7 +244,7 @@ public class RPGCharacter implements IListenable, Serializable{
 		notifyListener();
 	}
 
-	public int getStength() {
+	public int getStrength() {
 		return stength;
 	}
 
@@ -341,14 +342,22 @@ public class RPGCharacter implements IListenable, Serializable{
 
 	@Override
 	public void addListener(IListener listener) {
+		listenersList = new ArrayList<IListener>();
 		listenersList.add(listener);
+
 	}
 
 	@Override
 	public void notifyListener() {
-		//System.out.println("notifing listeners");
 		for (IListener listener : listenersList) {
 			listener.dataUpdated();
+		}
+
+	}
+
+	public void notifyNewCharacter() {
+		for (IListener listener : listenersList) {
+			listener.loadNewCharacter();
 		}
 
 	}

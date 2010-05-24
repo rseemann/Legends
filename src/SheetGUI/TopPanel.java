@@ -27,11 +27,11 @@ public class TopPanel{
 
 		// -------Character Info Panel--------
 				
-		JPanel topPanelInfo = new TopPanelInfo().CreateTopPanelInfo(rpgSheet);
+		JPanel topPanelInfo = new TopPanelInfo().createTopPanelInfo(rpgSheet);
 		
 		// ----Character Traits and Rings Panel----
 		
-		JPanel topPanelRings = new TopPanelRings().CreateTopPanelRing(rpgSheet);
+		JPanel topPanelRings = new TopPanelRings().createTopPanelRing(rpgSheet);
 
 		// addings panels to topPanel
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);

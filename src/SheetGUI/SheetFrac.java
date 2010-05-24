@@ -30,13 +30,14 @@ public class SheetFrac implements Serializable{
 	private JFrame mainWindow;
 	private JPanel topPanel;
 	private JPanel rightPanel;
-	private RPGCharacter rpgChar = new RPGCharacter();
+	private static RPGCharacter rpgChar;
 	private Map<String, Integer> traitsMap = new HashMap<String, Integer>(); 
 	private static SheetFrac sheet;
+	private TopPanelRings ringsPanel = new TopPanelRings();
+	private TopPanelInfo infoPanel = new TopPanelInfo();
 	
-	public void addMainWindowItems(Container pane) {
-		
-		
+	public void addMainWindowItems(Container pane, RPGCharacter rpgChar) {
+				
 		// ---menu----
 		JMenuItem newMenuItem = new JMenuItem("New");
 		newMenuItem.addActionListener(new NewMenuItemListener());
@@ -57,13 +58,10 @@ public class SheetFrac implements Serializable{
 		topPanel = new JPanel(new BorderLayout());
 		topPanel.setBackground(Color.lightGray);		
 		
-		TopPanelRings ringsPanel = new TopPanelRings();
-		rpgChar.addListener(ringsPanel);
-		TopPanelInfo infoPanel = new TopPanelInfo();
-		rpgChar.addListener(infoPanel);
+		JPanel topPanelRings = ringsPanel.createTopPanelRing(sheet);
+		JPanel topPanelInfo = infoPanel.createTopPanelInfo(sheet);
 		
-		JPanel topPanelRings = ringsPanel.CreateTopPanelRing(sheet);
-		JPanel topPanelInfo = infoPanel.CreateTopPanelInfo(sheet);
+		addListeners(rpgChar);
 		
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
@@ -71,14 +69,10 @@ public class SheetFrac implements Serializable{
 		pane.add(BorderLayout.NORTH, topPanel);
 	}
 	
-	public void updateRings() {
-		rpgChar.calcRings();
-	}
-	
 	class SaveMenuItemListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
-
+						
 			JFileChooser saveChar = new JFileChooser();
 			
 			saveChar.showSaveDialog(mainWindow);
@@ -87,6 +81,7 @@ public class SheetFrac implements Serializable{
 
 			try {
 				os = new ObjectOutputStream(new FileOutputStream(saveChar.getSelectedFile()));
+				//os = new ObjectOutputStream(new FileOutputStream("testandooooo"));
 				os.writeObject(rpgChar);
 				os.close();
 
@@ -107,13 +102,17 @@ public class SheetFrac implements Serializable{
 			loadChar.showOpenDialog(mainWindow);
 			
 			try {
-				ObjectInputStream is = new ObjectInputStream(
-						new FileInputStream(loadChar.getSelectedFile()));
+				ObjectInputStream is = new ObjectInputStream(new FileInputStream(loadChar.getSelectedFile()));
 
-				rpgChar = (RPGCharacter) is.readObject();
-				//System.out.println(rpgChar.getEarthRing());
-				//System.out.println(rpgChar.getName());
+				//ObjectInputStream is = new ObjectInputStream(new FileInputStream("testandooooo"));
 				
+				rpgChar = (RPGCharacter) is.readObject();
+				addListeners(rpgChar);
+				createNewSheet();
+				rpgChar.notifyNewCharacter();
+				
+			
+								
 				is.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -134,51 +133,46 @@ public class SheetFrac implements Serializable{
 		public void actionPerformed(ActionEvent arg0) {
 			//if (rpgChar != new RPGCharacter()){
 				rpgChar = new RPGCharacter();
+				addListeners(rpgChar);
+				createNewSheet();
+				rpgChar.notifyNewCharacter();
 		}
 		
 	}
 	
-	
-	public void updateInfoDataFromSheet(Map<String, String> insertedData){
-		rpgChar.setName(insertedData.get("name"));
-		rpgChar.setClan(insertedData.get("clan"));
-		rpgChar.setSchool(insertedData.get("scho"));
-	}
-		
-	public void updateTraitsDataFromSheet(Map<String, Integer> insertedData){
-		rpgChar.setStamina(insertedData.get("stam"));
-		rpgChar.setWillpower(insertedData.get("will"));
-		rpgChar.setStrength(insertedData.get("stre"));
-		rpgChar.setPerception(insertedData.get("perc"));
-		rpgChar.setAgility(insertedData.get("agil"));
-		rpgChar.setIntelligence(insertedData.get("inte"));
-		rpgChar.setReflexes(insertedData.get("refl"));
-		rpgChar.setAwareness(insertedData.get("awar"));
-		rpgChar.setVoidRing(insertedData.get("void"));
-		rpgChar.calcRings();
-		
+	public void addListeners(RPGCharacter rpgChar){
+		rpgChar.addListener(infoPanel);
+		rpgChar.addListener(ringsPanel);
 	}
 	
 	public RPGCharacter getRpgChar() {
 		return rpgChar;
 	}
 	
-	public void createNShowGUI() {
+	public void createNewSheet(){
+		mainWindow.setVisible(false);
+		sheet.createNShowGUI(rpgChar);
+		mainWindow.setVisible(true);
+	}
+	
+	public void createNShowGUI(RPGCharacter rpgChar) {
 
 		mainWindow = new JFrame("Character Sheet");
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Set up the content pane.
-		addMainWindowItems(mainWindow.getContentPane());
+		addMainWindowItems(mainWindow.getContentPane(), rpgChar);
 
 		// Display the window.
 		mainWindow.pack();
 		mainWindow.setVisible(true);
 
 	}
+	
 	public static void main(String[] args) {
 		sheet = new SheetFrac();
-		sheet.createNShowGUI();
+		rpgChar = new RPGCharacter();
+		sheet.createNShowGUI(rpgChar);
 		
 		
 	}
