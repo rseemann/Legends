@@ -440,7 +440,7 @@ public class Sheet implements FocusListener {
 		rpgChar.setAwareness(Integer.parseInt(awarenessField.getText()));
 		rpgChar.setVoidRing(Integer.parseInt(voidRingField.getText()));
 		updateRings();
-		rpgChar.setWounds(rpgChar.getEarthRing());
+		rpgChar.setWounds();
 		rpgChar.getWounds();
 		
 	}
@@ -453,7 +453,7 @@ public class Sheet implements FocusListener {
 		schoolField.setText(rpgChar.getSchool());
 		staminaField.setText(String.valueOf(rpgChar.getStamina()));
 		willpowerField.setText(String.valueOf(rpgChar.getWillpower()));
-		strengthField.setText(String.valueOf(rpgChar.getStength()));
+		strengthField.setText(String.valueOf(rpgChar.getStrength()));
 		perceptionField.setText(String.valueOf(rpgChar.getPerception()));
 		agilityField.setText(String.valueOf(rpgChar.getAgility()));
 		intelligenceField.setText(String.valueOf(rpgChar.getIntelligence()));

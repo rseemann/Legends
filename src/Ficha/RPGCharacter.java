@@ -16,7 +16,7 @@ public class RPGCharacter implements IListenable, Serializable {
 	private ArrayList<Skill> skills = new ArrayList<Skill>();
 	private int skillPoints;
 	private String clan = "";
-	private Map wounds = new HashMap();
+	private Map<String, Integer> wounds = new HashMap<String, Integer>();
 	private double glory = 0;
 	private double honor = 0;
 	private double status = 0;
@@ -49,7 +49,7 @@ public class RPGCharacter implements IListenable, Serializable {
 
 	// system related methods
 	// hit points
-	public void setWounds(int earthRing) {
+	public void setWounds() {
 		wounds.put("Healthy", earthRing * 2);
 		wounds.put("Nicked", earthRing * 4);
 		wounds.put("Grazed", earthRing * 6);
@@ -60,9 +60,8 @@ public class RPGCharacter implements IListenable, Serializable {
 		wounds.put("Out", earthRing * 19);
 	}
 
-	public Map getWounds() {
+	public Map<String, Integer> getWounds() {
 		return wounds;
-
 	}
 
 	// constructor

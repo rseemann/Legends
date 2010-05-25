@@ -13,9 +13,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
@@ -31,6 +35,8 @@ public class TopPanelInfo implements IListener, Serializable, KeyListener {
 	private RPGCharacter rpgChar;
 	private SheetFrac sheet;
 	private JPanel topPanelInfo;
+	private Border loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+	private TitledBorder titleWounds;
 
 	public JPanel createTopPanelInfo(SheetFrac rpgSheet) {
 		rpgChar = rpgSheet.getRpgChar();
@@ -44,6 +50,7 @@ public class TopPanelInfo implements IListener, Serializable, KeyListener {
 
 		JLabel nameLabel = new JLabel("Name: ");
 		nameField = new JTextField(rpgChar.getName(), 16);
+		//nameField.setBorder(BorderFactory.createTitledBorder(loweredetched, "Name"));
 		nameField.addKeyListener(this);
 
 		JLabel clanLabel = new JLabel("Clan: ");
@@ -136,9 +143,8 @@ public class TopPanelInfo implements IListener, Serializable, KeyListener {
 
 	@Override
 	public void dataUpdated() {
-		System.out.println(rpgChar.getName());		
-		topPanelInfo.setBackground(getRandomColor());
-
+		rpgChar.calcRank();
+		rankField.setText(String.valueOf(rpgChar.getRank()));
 	}
 	
 	@Override

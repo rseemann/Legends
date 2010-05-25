@@ -68,16 +68,18 @@ public class TopPanelRings implements IListener, Serializable, KeyListener {
 		tpr.insets = new Insets(3, 0, 0, 0);
 
 		JLabel earthRingLabel = new JLabel("Earth: ");
-		earthRingField = new JTextField(String.valueOf(rpgChar.getEarthRing()),
-				3);
+		earthRingField = new JTextField(String.valueOf(rpgChar.getEarthRing()),	3);
+		earthRingField.setHorizontalAlignment(JTextField.CENTER);
 		earthRingField.setEditable(false);
 		JLabel staminaLabel = new JLabel("Stamina: ");
 		staminaField = new JTextField(String.valueOf(rpgChar.getStamina()), 3);
+		staminaField.setHorizontalAlignment(JTextField.CENTER);
 		staminaField.addKeyListener(this);
 
 		JLabel willpowerLabel = new JLabel("Willpower: ");
 		willpowerField = new JTextField(String.valueOf(rpgChar.getWillpower()),
 				3);
+		willpowerField.setHorizontalAlignment(JTextField.CENTER);
 		willpowerField.addKeyListener(this);
 		tpr.gridwidth = 1;
 
@@ -116,13 +118,17 @@ public class TopPanelRings implements IListener, Serializable, KeyListener {
 		JLabel waterRingLabel = new JLabel("Water: ");
 		waterRingField = new JTextField(String.valueOf(rpgChar.getWaterRing()),
 				3);
+		waterRingJPEG.setHorizontalAlignment(JTextField.CENTER);
 		waterRingField.setEditable(false);
+		waterRingField.setHorizontalAlignment(JTextField.CENTER);
 		JLabel strengthLabel = new JLabel("Strength: ");
 		strengthField = new JTextField(String.valueOf(rpgChar.getStrength()), 3);
+		strengthField.setHorizontalAlignment(JTextField.CENTER);
 		strengthField.addKeyListener(this);
 		JLabel perceptionLabel = new JLabel("Perception: ");
 		perceptionField = new JTextField(String
 				.valueOf(rpgChar.getPerception()), 3);
+		perceptionField.setHorizontalAlignment(JTextField.CENTER);
 		perceptionField.addKeyListener(this);
 
 		tpr.gridwidth = 1;
@@ -162,12 +168,15 @@ public class TopPanelRings implements IListener, Serializable, KeyListener {
 		JLabel fireRingLabel = new JLabel("Fire: ");
 		fireRingField = new JTextField(String.valueOf(rpgChar.getFireRing()), 3);
 		fireRingField.setEditable(false);
+		fireRingField.setHorizontalAlignment(JTextField.CENTER);
 		JLabel agilityLabel = new JLabel("Agility: ");
 		agilityField = new JTextField(String.valueOf(rpgChar.getAgility()), 3);
 		agilityField.addKeyListener(this);
+		agilityField.setHorizontalAlignment(JTextField.CENTER);
 		JLabel intelligenceLabel = new JLabel("Intelligence: ");
 		intelligenceField = new JTextField(String.valueOf(rpgChar
 				.getIntelligence()), 3);
+		intelligenceField.setHorizontalAlignment(JTextField.CENTER);
 		intelligenceField.addKeyListener(this);
 
 		tpr.gridwidth = 1;
@@ -206,13 +215,16 @@ public class TopPanelRings implements IListener, Serializable, KeyListener {
 
 		JLabel airRingLabel = new JLabel("Air: ");
 		airRingField = new JTextField(String.valueOf(rpgChar.getAirRing()), 3);
+		airRingField.setHorizontalAlignment(JTextField.CENTER);
 		airRingField.setEditable(false);
 		JLabel reflexesLabel = new JLabel("Reflexes: ");
 		reflexesField = new JTextField(String.valueOf(rpgChar.getReflexes()), 3);
 		reflexesField.addKeyListener(this);
+		reflexesField.setHorizontalAlignment(JTextField.CENTER);
 		JLabel awarenessLabel = new JLabel("Awareness: ");
 		awarenessField = new JTextField(String.valueOf(rpgChar.getAwareness()),
 				3);
+		awarenessField.setHorizontalAlignment(JTextField.CENTER);
 		awarenessField.addKeyListener(this);
 
 		tpr.gridwidth = 1;
@@ -252,9 +264,11 @@ public class TopPanelRings implements IListener, Serializable, KeyListener {
 		JLabel voidRingLabel = new JLabel("Void: ");
 
 		voidRingField = new JTextField(String.valueOf(rpgChar.getVoidRing()), 3);
+		voidRingField.setHorizontalAlignment(JTextField.CENTER);
 		JLabel pointsSpentLabel = new JLabel("Points Spent: ");
 		voidRingField.addKeyListener(this);
 		pointsSpentField = new JTextField("0", 3);
+		pointsSpentField.setHorizontalAlignment(JTextField.CENTER);
 
 		tpr.gridwidth = 1;
 		tpr.gridy = 1;

@@ -3,10 +3,9 @@ package SheetGUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,93 +25,112 @@ import javax.swing.JPanel;
 
 import Ficha.RPGCharacter;
 
-public class SheetFrac implements Serializable{
+public class SheetFrac implements Serializable {
 	private JFrame mainWindow;
 	private JPanel topPanel;
 	private JPanel rightPanel;
 	private static RPGCharacter rpgChar;
-	private Map<String, Integer> traitsMap = new HashMap<String, Integer>(); 
+	private Map<String, Integer> traitsMap = new HashMap<String, Integer>();
 	private static SheetFrac sheet;
 	private TopPanelRings ringsPanel = new TopPanelRings();
 	private TopPanelInfo infoPanel = new TopPanelInfo();
-	
+	private RightPanel righPanel = new RightPanel();
+	private CenterPanel centerPanel = new CenterPanel();
+
 	public void addMainWindowItems(Container pane, RPGCharacter rpgChar) {
-				
+
 		// ---menu----
 		JMenuItem newMenuItem = new JMenuItem("New");
 		newMenuItem.addActionListener(new NewMenuItemListener());
+		//JMenuItem newCharMenuItem = new JMenuItem("Character");
 		JMenuBar menuBar = new JMenuBar();
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new JMenu("Character");
 		JMenuItem loadMenuItem = new JMenuItem("Load");
 		loadMenuItem.addActionListener(new LoadMenuItemListener());
 		JMenuItem saveMenuItem = new JMenuItem("Save");
 		saveMenuItem.addActionListener(new SaveMenuItemListener());
 
+		
 		fileMenu.add(newMenuItem);
+		//newMenuItem.add(newCharMenuItem);
 		fileMenu.add(loadMenuItem);
 		fileMenu.add(saveMenuItem);
 		menuBar.add(fileMenu);
 		mainWindow.setJMenuBar(menuBar);
+		
+		//skill menu
+		
+		JMenu skillMenu = new JMenu("Skill");
+		JMenuItem newSkillMenuItem = new JMenuItem("New");
+		newSkillMenuItem.addActionListener(new NewSkillMenuItemListener());
+		skillMenu.add(newSkillMenuItem);
+		menuBar.add(skillMenu);
 
 		// -----top panel-----
 		topPanel = new JPanel(new BorderLayout());
-		topPanel.setBackground(Color.lightGray);		
-		
+		topPanel.setBackground(Color.lightGray);
+
 		JPanel topPanelRings = ringsPanel.createTopPanelRing(sheet);
 		JPanel topPanelInfo = infoPanel.createTopPanelInfo(sheet);
-		
 		addListeners(rpgChar);
+
+		
 		
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
 		
+		//right panel
+		JPanel woundsPanel = righPanel.createRightPanel(sheet);
+		
+		//center panel
+		
+		JPanel skillsPanel = centerPanel.createCenterPanel(sheet);
+		
+		pane.add(BorderLayout.CENTER, skillsPanel);
+		pane.add(BorderLayout.EAST, woundsPanel);
 		pane.add(BorderLayout.NORTH, topPanel);
 	}
 	
+	class NewSkillMenuItemListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			centerPanel.showNewSkillWindow();			
+		}
+		
+	}
+
 	class SaveMenuItemListener implements ActionListener {
-
 		public void actionPerformed(ActionEvent arg0) {
-						
+
 			JFileChooser saveChar = new JFileChooser();
-			
 			saveChar.showSaveDialog(mainWindow);
-
 			ObjectOutputStream os;
-
 			try {
-				os = new ObjectOutputStream(new FileOutputStream(saveChar.getSelectedFile()));
-				//os = new ObjectOutputStream(new FileOutputStream("testandooooo"));
+				os = new ObjectOutputStream(new FileOutputStream(saveChar
+						.getSelectedFile()));
 				os.writeObject(rpgChar);
 				os.close();
-
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 		}
 	}
 
 	class LoadMenuItemListener implements ActionListener {
-
 		public void actionPerformed(ActionEvent arg0) {
 
 			JFileChooser loadChar = new JFileChooser();
 			loadChar.showOpenDialog(mainWindow);
-			
 			try {
-				ObjectInputStream is = new ObjectInputStream(new FileInputStream(loadChar.getSelectedFile()));
-
-				//ObjectInputStream is = new ObjectInputStream(new FileInputStream("testandooooo"));
-				
+				ObjectInputStream is = new ObjectInputStream(
+						new FileInputStream(loadChar.getSelectedFile()));
 				rpgChar = (RPGCharacter) is.readObject();
 				addListeners(rpgChar);
 				createNewSheet();
 				rpgChar.notifyNewCharacter();
-				
-			
-								
 				is.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -121,43 +139,42 @@ public class SheetFrac implements Serializable{
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			
-			
-			
 		}
 	}
-	
-	class NewMenuItemListener implements ActionListener{
+
+	class NewMenuItemListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			//if (rpgChar != new RPGCharacter()){
-				rpgChar = new RPGCharacter();
-				addListeners(rpgChar);
-				createNewSheet();
-				rpgChar.notifyNewCharacter();
+			// if (rpgChar != new RPGCharacter()){
+			rpgChar = new RPGCharacter();
+			addListeners(rpgChar);
+			createNewSheet();
+			rpgChar.notifyNewCharacter();
 		}
-		
+
 	}
-	
-	public void addListeners(RPGCharacter rpgChar){
+
+	public void addListeners(RPGCharacter rpgChar) {
 		rpgChar.addListener(infoPanel);
 		rpgChar.addListener(ringsPanel);
+		rpgChar.addListener(righPanel);
 	}
-	
+
 	public RPGCharacter getRpgChar() {
 		return rpgChar;
 	}
-	
-	public void createNewSheet(){
+
+	public void createNewSheet() {
 		mainWindow.setVisible(false);
 		sheet.createNShowGUI(rpgChar);
 		mainWindow.setVisible(true);
 	}
-	
+
 	public void createNShowGUI(RPGCharacter rpgChar) {
 
 		mainWindow = new JFrame("Character Sheet");
+		mainWindow.setPreferredSize(new Dimension(1024, 768));
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Set up the content pane.
@@ -168,13 +185,12 @@ public class SheetFrac implements Serializable{
 		mainWindow.setVisible(true);
 
 	}
-	
+
 	public static void main(String[] args) {
 		sheet = new SheetFrac();
 		rpgChar = new RPGCharacter();
 		sheet.createNShowGUI(rpgChar);
-		
-		
+
 	}
 
 }
