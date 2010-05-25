@@ -28,13 +28,12 @@ import Ficha.RPGCharacter;
 public class SheetFrac implements Serializable {
 	private JFrame mainWindow;
 	private JPanel topPanel;
-	private JPanel rightPanel;
 	private static RPGCharacter rpgChar;
 	private Map<String, Integer> traitsMap = new HashMap<String, Integer>();
 	private static SheetFrac sheet;
 	private TopPanelRings ringsPanel = new TopPanelRings();
 	private TopPanelInfo infoPanel = new TopPanelInfo();
-	private RightPanel righPanel = new RightPanel();
+	private RightPanel rightPanel = new RightPanel();
 	private CenterPanel centerPanel = new CenterPanel();
 
 	public void addMainWindowItems(Container pane, RPGCharacter rpgChar) {
@@ -42,7 +41,7 @@ public class SheetFrac implements Serializable {
 		// ---menu----
 		JMenuItem newMenuItem = new JMenuItem("New");
 		newMenuItem.addActionListener(new NewMenuItemListener());
-		//JMenuItem newCharMenuItem = new JMenuItem("Character");
+		// JMenuItem newCharMenuItem = new JMenuItem("Character");
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("Character");
 		JMenuItem loadMenuItem = new JMenuItem("Load");
@@ -50,16 +49,15 @@ public class SheetFrac implements Serializable {
 		JMenuItem saveMenuItem = new JMenuItem("Save");
 		saveMenuItem.addActionListener(new SaveMenuItemListener());
 
-		
 		fileMenu.add(newMenuItem);
-		//newMenuItem.add(newCharMenuItem);
+		// newMenuItem.add(newCharMenuItem);
 		fileMenu.add(loadMenuItem);
 		fileMenu.add(saveMenuItem);
 		menuBar.add(fileMenu);
 		mainWindow.setJMenuBar(menuBar);
-		
-		//skill menu
-		
+
+		// skill menu
+
 		JMenu skillMenu = new JMenu("Skill");
 		JMenuItem newSkillMenuItem = new JMenuItem("New");
 		newSkillMenuItem.addActionListener(new NewSkillMenuItemListener());
@@ -74,30 +72,28 @@ public class SheetFrac implements Serializable {
 		JPanel topPanelInfo = infoPanel.createTopPanelInfo(sheet);
 		addListeners(rpgChar);
 
-		
-		
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
-		
-		//right panel
-		JPanel woundsPanel = righPanel.createRightPanel(sheet);
-		
-		//center panel
-		
+
+		// right panel
+		JPanel woundsPanel = rightPanel.createRightPanel(sheet);
+
+		// center panel
+
 		JPanel skillsPanel = centerPanel.createCenterPanel(sheet);
-		
+
 		pane.add(BorderLayout.CENTER, skillsPanel);
 		pane.add(BorderLayout.EAST, woundsPanel);
 		pane.add(BorderLayout.NORTH, topPanel);
 	}
-	
-	class NewSkillMenuItemListener implements ActionListener{
+
+	class NewSkillMenuItemListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			centerPanel.showNewSkillWindow();			
+			centerPanel.showNewSkillWindow();
 		}
-		
+
 	}
 
 	class SaveMenuItemListener implements ActionListener {
@@ -158,7 +154,9 @@ public class SheetFrac implements Serializable {
 	public void addListeners(RPGCharacter rpgChar) {
 		rpgChar.addListener(infoPanel);
 		rpgChar.addListener(ringsPanel);
-		rpgChar.addListener(righPanel);
+		rpgChar.addListener(rightPanel);
+		rpgChar.addListener(centerPanel);
+
 	}
 
 	public RPGCharacter getRpgChar() {
@@ -182,6 +180,7 @@ public class SheetFrac implements Serializable {
 
 		// Display the window.
 		mainWindow.pack();
+		mainWindow.setLocationRelativeTo(null); // centers window
 		mainWindow.setVisible(true);
 
 	}

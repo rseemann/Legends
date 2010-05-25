@@ -1,12 +1,14 @@
 package Skills;
 
-public class Skill{ //implements SynergyBonus
+import java.io.Serializable;
+
+public class Skill implements Serializable{ //implements SynergyBonus
 	private String name;
 	private int rank;
 	
-	public Skill(String name) {
+	public Skill(String name, int rank) {
 		this.name = name;
-		this.rank = 1;
+		this.rank = rank;
 	}
 	
 	public String getName() {
@@ -25,8 +27,4 @@ public class Skill{ //implements SynergyBonus
 		this.rank = rank;
 	}
 	
-	public String toString(){
-		return this.name+ " "+ this.rank;
-	}
-
 }

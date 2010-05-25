@@ -81,8 +81,10 @@ public class RPGCharacter implements IListenable, Serializable {
 	 */
 
 	// skills
-	public void addSkill(String name) {
-		skills.add(new Skill(name));
+	public void addSkill(String name, int rank) {
+		Skill newSkill = new Skill(name, rank);
+		skills.add(newSkill);
+		notifyListener();
 	}
 
 	public int getSkillLocation(String skillName) { // finds the location of the
