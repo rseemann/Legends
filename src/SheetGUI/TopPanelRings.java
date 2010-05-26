@@ -295,7 +295,7 @@ public class TopPanelRings implements IListener, Serializable, KeyListener {
 		airRingField.setText(rpgChar.getAirRing() + "");
 		waterRingField.setText(rpgChar.getWaterRing() + "");
 		fireRingField.setText(rpgChar.getFireRing() + "");
-		voidRingField.setText(rpgChar.getVoidRing() + "");
+		//voidRingField.setText(rpgChar.getVoidRing() + "");
 	}
 
 	public void updateCharacterTraitsAndRings() {

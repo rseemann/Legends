@@ -24,7 +24,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import Ficha.RPGCharacter;
-import RoladorDeDadosL5RGUI.Display;
 
 public class SheetFrac implements Serializable {
 	private JFrame mainWindow;
@@ -42,7 +41,6 @@ public class SheetFrac implements Serializable {
 		// ---menu----
 		JMenuItem newMenuItem = new JMenuItem("New");
 		newMenuItem.addActionListener(new NewMenuItemListener());
-		// JMenuItem newCharMenuItem = new JMenuItem("Character");
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("Character");
 		JMenuItem loadMenuItem = new JMenuItem("Load");
@@ -62,7 +60,10 @@ public class SheetFrac implements Serializable {
 		JMenu skillMenu = new JMenu("Skill");
 		JMenuItem newSkillMenuItem = new JMenuItem("New");
 		newSkillMenuItem.addActionListener(new NewSkillMenuItemListener());
+		JMenuItem editSkillMenuItem = new JMenuItem("Edit");
+		editSkillMenuItem.addActionListener(new EditSkillMenuItemListener());
 		skillMenu.add(newSkillMenuItem);
+		skillMenu.add(editSkillMenuItem);
 		menuBar.add(skillMenu);
 
 		// -----top panel-----
@@ -72,10 +73,10 @@ public class SheetFrac implements Serializable {
 		JPanel topPanelRings = ringsPanel.createTopPanelRing(sheet);
 		JPanel topPanelInfo = infoPanel.createTopPanelInfo(sheet);
 		addListeners(rpgChar);
-		
-		//rolling panel
+
+		// rolling panel
 		JPanel rollPanel = new DicePanel().createRollingPanel();
-		
+
 		topPanel.add(BorderLayout.EAST, rollPanel);
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
@@ -86,15 +87,13 @@ public class SheetFrac implements Serializable {
 		// center panel
 
 		JPanel skillsPanel = centerSkillPanel.createCenterPanel(sheet);
+
+		// roll panel
+
 		
-		//roll panel
-		
-		
-		
-		
-		pane.add(BorderLayout.CENTER, skillsPanel);
 		pane.add(BorderLayout.EAST, woundsPanel);
 		pane.add(BorderLayout.NORTH, topPanel);
+		pane.add(BorderLayout.CENTER, skillsPanel);
 	}
 
 	class NewSkillMenuItemListener implements ActionListener {
@@ -104,6 +103,13 @@ public class SheetFrac implements Serializable {
 			centerSkillPanel.showNewSkillWindow();
 		}
 
+	}
+	
+	class EditSkillMenuItemListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			centerSkillPanel.showEditSkillWindow();
+		}
 	}
 
 	class SaveMenuItemListener implements ActionListener {
@@ -162,11 +168,14 @@ public class SheetFrac implements Serializable {
 	}
 
 	public void addListeners(RPGCharacter rpgChar) {
-		rpgChar.addListener(infoPanel);
+		rpgChar.clearListener();
+		
 		rpgChar.addListener(ringsPanel);
+		rpgChar.addListener(infoPanel);
 		rpgChar.addListener(rightPanel);
 		rpgChar.addListener(centerSkillPanel);
-
+		
+		
 	}
 
 	public RPGCharacter getRpgChar() {

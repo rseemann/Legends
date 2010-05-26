@@ -343,9 +343,13 @@ public class RPGCharacter implements IListenable, Serializable {
 
 	@Override
 	public void addListener(IListener listener) {
-		listenersList = new ArrayList<IListener>();
 		listenersList.add(listener);
 
+	}
+	
+	@Override
+	public void clearListener(){
+		listenersList = new ArrayList<IListener>();
 	}
 
 	@Override

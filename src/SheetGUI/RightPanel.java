@@ -228,6 +228,7 @@ public class RightPanel implements IListener, KeyListener {
 
 	@Override
 	public void dataUpdated() {
+		System.out.println("updating right");
 		updateWoundsLevels();
 		checkWoundsLevel();
 	}
