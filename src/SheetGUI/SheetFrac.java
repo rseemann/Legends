@@ -24,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import Ficha.RPGCharacter;
+import RoladorDeDadosL5RGUI.Display;
 
 public class SheetFrac implements Serializable {
 	private JFrame mainWindow;
@@ -34,7 +35,7 @@ public class SheetFrac implements Serializable {
 	private TopPanelRings ringsPanel = new TopPanelRings();
 	private TopPanelInfo infoPanel = new TopPanelInfo();
 	private RightPanel rightPanel = new RightPanel();
-	private CenterPanel centerPanel = new CenterPanel();
+	private CenterPanel centerSkillPanel = new CenterPanel();
 
 	public void addMainWindowItems(Container pane, RPGCharacter rpgChar) {
 
@@ -71,7 +72,11 @@ public class SheetFrac implements Serializable {
 		JPanel topPanelRings = ringsPanel.createTopPanelRing(sheet);
 		JPanel topPanelInfo = infoPanel.createTopPanelInfo(sheet);
 		addListeners(rpgChar);
-
+		
+		//rolling panel
+		JPanel rollPanel = new DicePanel().createRollingPanel();
+		
+		topPanel.add(BorderLayout.EAST, rollPanel);
 		topPanel.add(BorderLayout.NORTH, topPanelInfo);
 		topPanel.add(BorderLayout.CENTER, topPanelRings);
 
@@ -80,8 +85,13 @@ public class SheetFrac implements Serializable {
 
 		// center panel
 
-		JPanel skillsPanel = centerPanel.createCenterPanel(sheet);
-
+		JPanel skillsPanel = centerSkillPanel.createCenterPanel(sheet);
+		
+		//roll panel
+		
+		
+		
+		
 		pane.add(BorderLayout.CENTER, skillsPanel);
 		pane.add(BorderLayout.EAST, woundsPanel);
 		pane.add(BorderLayout.NORTH, topPanel);
@@ -91,7 +101,7 @@ public class SheetFrac implements Serializable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			centerPanel.showNewSkillWindow();
+			centerSkillPanel.showNewSkillWindow();
 		}
 
 	}
@@ -155,7 +165,7 @@ public class SheetFrac implements Serializable {
 		rpgChar.addListener(infoPanel);
 		rpgChar.addListener(ringsPanel);
 		rpgChar.addListener(rightPanel);
-		rpgChar.addListener(centerPanel);
+		rpgChar.addListener(centerSkillPanel);
 
 	}
 
