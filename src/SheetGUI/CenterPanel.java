@@ -22,14 +22,19 @@ import Ficha.RPGCharacter;
 import Interfaces.IListener;
 import Skills.Skill;
 
-public class CenterPanel implements ActionListener, IListener {
+public class CenterPanel implements IListener {
 	private JPanel centerPanel;
 	private JFrame addSkillWindow;
 	private JFrame editSkillWindow;
+	private JFrame editingSkillWindow;
 	private RPGCharacter rpgChar;
 	private Border loweredetched = BorderFactory
 			.createEtchedBorder(EtchedBorder.LOWERED);
 	private JTextField newSkillName;
+	private SkillFields editingSkillField;
+	private JTextField editingSkillName;
+	private JTextField editingSkillRank;
+	private JTextField editSkillNameField;
 	private JTextField newSkillRank;
 	private ArrayList<SkillFields> skillFieldsList = new ArrayList<SkillFields>();
 
@@ -49,25 +54,34 @@ public class CenterPanel implements ActionListener, IListener {
 
 		addSkillWindow = new JFrame("Add new Skill");
 		// addSkillWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		addSkillWindowItems(addSkillWindow.getContentPane(), rpgChar);
+		addSkillWindowItems(addSkillWindow.getContentPane());
 		addSkillWindow.pack();
 		addSkillWindow.setLocationRelativeTo(null);
 		addSkillWindow.setVisible(true);
 
 	}
-	
-	//creates a frame that let the user edit a skill
-	public void showEditSkillWindow(){
+
+	public void showEditingSkillWindow(int index) {
+		editingSkillWindow = new JFrame("Edit the choosen skill");
+		// addSkillWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addEditingSkillWindowItems(editingSkillWindow.getContentPane(), index);
+		editingSkillWindow.pack();
+		editingSkillWindow.setLocationRelativeTo(null);
+		editingSkillWindow.setVisible(true);
+	}
+
+	// creates a frame that let the user edit a skill
+	public void showEditSkillWindow() {
 		editSkillWindow = new JFrame("Edit Skill");
 		// addSkillWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		addEditSkillWindowItems(editSkillWindow.getContentPane(), rpgChar);
+		addEditSkillWindowItems(editSkillWindow.getContentPane());
 		editSkillWindow.pack();
 		editSkillWindow.setLocationRelativeTo(null);
 		editSkillWindow.setVisible(true);
 	}
-	
+
 	// creates the interface the use uses to add the skill
-	private void addSkillWindowItems(Container pane, RPGCharacter rpgChar) {
+	private void addSkillWindowItems(Container pane) {
 		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
 
 		TitledBorder titleSkillName = BorderFactory.createTitledBorder(
@@ -82,44 +96,101 @@ public class CenterPanel implements ActionListener, IListener {
 		newSkillRank.setBorder(titleSkillRank);
 
 		JButton saveButton = new JButton("Ok");
-		saveButton.addActionListener(this);
+		saveButton.addActionListener(new saveSkillActionListener());
 
 		pane.add(newSkillName);
 		pane.add(newSkillRank);
 		pane.add(saveButton);
 
 	}
-	
-	private void addEditSkillWindowItems(Container pane, RPGCharacter rpgChar) {
+
+	private void addEditingSkillWindowItems(Container pane, int index) {
+		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
+
+		TitledBorder titleSkillName = BorderFactory.createTitledBorder(
+				loweredetched, "Skill Name");
+		editingSkillName = new JTextField(skillFieldsList.get(index).getSkill()
+				.getName(), 12);
+		editingSkillName.setBorder(titleSkillName);
+
+		TitledBorder titleSkillRank = BorderFactory.createTitledBorder(
+				loweredetched, "Rank");
+		editingSkillRank = new JTextField(skillFieldsList.get(index).getSkill()
+				.getRank()
+				+ "", 3);
+		editingSkillRank.setHorizontalAlignment(JTextField.CENTER);
+		editingSkillRank.setBorder(titleSkillRank);
+
+		JButton saveButton = new JButton("Ok");
+		saveButton.addActionListener(new saveEditedSkillActionListener());
+
+		pane.add(editingSkillName);
+		pane.add(editingSkillRank);
+		pane.add(saveButton);
+	}
+
+	private void addEditSkillWindowItems(Container pane) {
 		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
 
 		TitledBorder titleSkillName = BorderFactory.createTitledBorder(
 				loweredetched, "Enter the skill name");
-		JTextField editSkillName = new JTextField("", 12);
-		editSkillName.setBorder(titleSkillName);
+		editSkillNameField = new JTextField("", 12);
+		editSkillNameField.setBorder(titleSkillName);
 
 		JButton okButton = new JButton("Ok");
-		//okButton.addActionListener();
-		pane.add(editSkillName);
+		okButton.addActionListener(new editSkillActionListener());
+		pane.add(editSkillNameField);
 		pane.add(okButton);
 
 	}
 
+	class saveEditedSkillActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			System.out.println(editSkillNameField.getText());
+			rpgChar.removeSkill(editSkillNameField.getText());
+			addSkillToChar(rpgChar, editingSkillName, editingSkillRank);
+			
+		}
+
+	}
+
 	// user clicks the save button
-	@Override
-	public void actionPerformed(ActionEvent arg0) { // addskill window ok
-		addSkillToChar(rpgChar);
-		addSkillWindow.dispose();
+	class saveSkillActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) { // addskill window ok
+			addSkillToChar(rpgChar, newSkillName, newSkillRank);
+			addSkillWindow.dispose();
+		}
+	}
+
+	class editSkillActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent ae) { // addskill window ok
+			int index = findSkillLocation(editSkillNameField.getText());
+			showEditingSkillWindow(index);
+			editSkillWindow.dispose();
+		}
+
+		private int findSkillLocation(String skillName) {
+			int fieldIndex = 0;
+			for (SkillFields field : skillFieldsList) {
+				if (skillName.equalsIgnoreCase(field.getSkill().getName())) {
+					editingSkillField = field;
+					fieldIndex = skillFieldsList.indexOf(editingSkillField);
+				}
+			}
+			return fieldIndex;
+		}
 	}
 
 	// if the skill is new add it to the char and creates a clone of it to the
 	// panel.
-	private void addSkillToChar(RPGCharacter rpgChar) {
-		if (checkIfSkillIsNew(newSkillName.getText())) {
-			rpgChar.addSkill(newSkillName.getText(), Integer
-					.parseInt(newSkillRank.getText()));
-			Skill addedSkill = new Skill(newSkillName.getText(), Integer
-					.parseInt(newSkillRank.getText()));
+	private void addSkillToChar(RPGCharacter rpgChar, JTextField nameField,	JTextField rankField) {
+		if (checkIfSkillIsNew(nameField.getText())) {
+			rpgChar.addSkill(nameField.getText(), Integer.parseInt(rankField.getText()));
+			Skill addedSkill = new Skill(nameField.getText(), Integer.parseInt(rankField.getText()));
 			addSkillToCollection(addedSkill);
 		} else {
 			showNewSkillWindow();
@@ -229,7 +300,7 @@ public class CenterPanel implements ActionListener, IListener {
 	@Override
 	public void loadNewCharacter() {
 		System.out.println("updating new center");
-		// skillFieldsList = new ArrayList<SkillFields>();
+		skillFieldsList = new ArrayList<SkillFields>();
 		addAllFieldsToCenterPanel();
 	}
 

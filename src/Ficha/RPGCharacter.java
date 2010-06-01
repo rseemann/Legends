@@ -86,6 +86,17 @@ public class RPGCharacter implements IListenable, Serializable {
 		skills.add(newSkill);
 		notifyListener();
 	}
+	
+	public void removeSkill(String name) {
+		for (Skill skillToBeRemoved : skills)
+			if(skillToBeRemoved.getName().equalsIgnoreCase(name)){
+				skills.remove(skillToBeRemoved);
+			}
+		;
+		notifyListener();
+	}
+	
+	
 
 	public int getSkillLocation(String skillName) { // finds the location of the
 		// desired skill in the list
